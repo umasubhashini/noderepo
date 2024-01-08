@@ -40,6 +40,8 @@
                         <li><a href="/companies-list">Company List </a></li>
                         
                         <li><a href="/employee-list">Employee-List</a></li>
+
+                        <li><a href="/create-schema">Company-Schema</a></li>
                     </ul>
                 </li>
 
@@ -212,53 +214,3 @@
         </div>
     </div>
 </div>
-
-
-
-<script>
-    $(document).ready(function () {
-        // Prevent default behavior and stop event propagation
-        $('.submenu-link').on('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            // Add any additional logic here if needed
-
-            // Redirect manually if needed
-            window.location.href = $(this).attr('href');
-        });
-
-        // Optionally, close the submenu on clicking outside of it
-        $(document).on('click', function () {
-            $('.submenu ul').slideUp();
-        });
-
-        // Keep the submenu open when clicking on it
-        $('.submenu').on('click', function (e) {
-            e.stopPropagation(); // Prevent closing when clicking inside the submenu
-            $(this).find('ul').slideToggle();
-        });
-    });
-</script> <script>
-    $(document).ready(function () {
-        // Prevent default behavior and stop event propagation
-        $('.submenu-link').on('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            // Add any additional logic here if needed
-
-            // Redirect manually if needed
-            window.location.href = $(this).attr('href');
-        });
-
-        // Optionally, close the submenu on clicking outside of it
-        $(document).on('click', function () {
-            $('.submenu ul').slideUp();
-        });
-
-        // Keep the submenu open when clicking on it
-        $('.submenu').on('click', function (e) {
-            e.stopPropagation(); // Prevent closing when clicking inside the submenu
-            $(this).find('ul').slideToggle();
-        });
-    });
-</script>
