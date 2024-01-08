@@ -13,6 +13,7 @@ const temp = require("./models/templates");
 const cpages = require("./models/custompages");
 const mcompany = require("./models/company");
 const emp = require("./models/employee");
+const dfields = require("./models/dynamicschema");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
@@ -1358,3 +1359,28 @@ app.get("/custompages",async(req,res)=>{
   res.render('admin/custompages',{employees});
 }
 );
+
+
+app.get('/create-schema',async(req,res)=>{
+  const companies = await mcompany.find({});
+  res.render('admin/create-schema',{companies});
+});
+
+app.post('/create-schema', async (req, res) => {
+  try {
+    
+    const { company_id, fields, type } = req.body;
+    console.log(req.body);
+    const newDocument = new dfields({
+      company_id,
+      fields: fields.map((field, index) => ({ name: field, type: type[index] })),
+    });
+
+    await newDocument.save();
+
+    res.json({ success: true, message: 'DynamicForm created successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error'); // Handle errors appropriately
+  }
+});
