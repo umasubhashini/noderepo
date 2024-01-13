@@ -56,10 +56,10 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="page-sub-header">
-									<h3 class="page-title">Company List</h3>
+									<h3 class="page-title">User</h3>
 									<ul class="breadcrumb">
-										<li class="breadcrumb-item"><a href="user.ejs">Company</a></li>
-										<li class="breadcrumb-item active">Page Status</li>
+										<li class="breadcrumb-item"><a href="user.ejs">User</a></li>
+										<li class="breadcrumb-item active">All Users</li>
 									</ul>
 								</div>
 							</div>
@@ -69,6 +69,17 @@
 
 					<div class="student-group-form">
 						<div class="row">
+
+							<!-- <div class="col-lg-3 col-md-6">  
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Search by Name ...">
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6">  
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Search by Phone ...">
+								</div>
+							</div> -->
 							<div class="col-lg-3 col-md-6">
 								<div class="form-group">
 									<input type="text" class="form-control" id="searchEmployeeInput"
@@ -76,12 +87,6 @@
 								</div>
 							</div>
 
-							
-							<div class="col-lg-2">
-								<div class="search-student-btn">
-									<button type="btn" class="btn btn-primary">Search</button>
-								</div>
-							</div>
 						</div>
 					</div>
 
@@ -95,14 +100,15 @@
 									<div class="page-header">
 										<div class="row align-items-center">
 											<div class="col">
-												<h3 class="page-title">Students</h3>
+												<h3 class="page-title">Employees</h3>
 											</div>
 											<div class="col-auto text-end float-end ms-auto download-grp">
 												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
 												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
 												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
-												<a href="/add-company" id="addCardBtn" class="btn btn-primary"><i
-														class="fas fa-plus"></i> Add Company</a>
+												<a href="/add-employee" id="addCardBtn" class="btn btn-primary"><i
+														class="fas fa-plus"></i> Add Employee</a>
+                                                <a href="#" id="downloadExcelBtn" class="btn btn-primary"><i class="fas fa-download"></i> Download Excel</a>
 											</div>
 										</div>
 									</div>
@@ -113,46 +119,54 @@
 											<thead>
 												<tr>
 													<th>S.No</th>
-													<th>Company Name</th>
-													<th>Company logo</th>
-													<th>CEO Email</th>
-													<th>Status</th>
+													<th>Photo</th>
+													<th>Name</th>
+													<th>Contact</th>
+													<th>Designation</th>
+													<th>Company</th>
+													<th class="text-end">Edit/Delete</th>
 												</tr>
 											</thead>
-											<!-- ... (other HTML code) ... -->
 
 											<tbody>
-												<% companies.forEach((company, index)=> { %>
-													<tr class="company-row">
+												<% employees.forEach((employee, index)=> { %>
+													<tr class="employee-row">
 														<td>
 															<%= index + 1 %>
 														</td>
+														<td><img src="<%= employee.photo %>" alt="Employee Photo"
+																width="50"></td>
 														<td>
-															<%= company.name %>
+															<%= employee.name %>
 														</td>
 														<td>
-															<img src="<%= company.logo %>" alt="Company Logo"
-																height="50" width="50">
-														<td>
-															<%= company.ceo.email %>
+															<%= employee.contact %>
 														</td>
 														<td>
-															<%= company.status===1 ? 'Activated' : 'Deactivated' %>
+															<%= employee.designation %>
 														</td>
 														<td>
-															<button
-																onclick="updateCompanyStatus('<%= company._id %>', this.getAttribute('data-action'))"
-																data-action='<%= company.status === 1 ? "deactivate" : "activate" %>'
-																class="btn btn-primary">
-																<%= company.status===1 ? 'Deactivate' : 'Activate' %>
-															</button>
+															<% const company=companies.find(c=> c._id.toString() ===
+																(employee.company ? employee.company.toString() : ''));
+																%>
+																<%= company ? company.name : 'Unknown Company' %>
 
+														</td>
+														<td class="text-end">
+															<div class="actions">
+																<a href="/edit-employee/<%= employee._id %>"
+																	class="btn btn-sm btn-warning">
+																	<i class="feather-edit"></i>
+																</a>
+																<a href="/delete-employee/<%= employee._id %>"
+																	class="btn btn-sm btn-danger">
+																	<i class="feather-trash-2"></i>
+																</a>
+															</div>
 														</td>
 													</tr>
 													<% }); %>
 											</tbody>
-
-											<!-- ... (other HTML code) ... -->
 
 										</table>
 									</div>
@@ -161,54 +175,37 @@
 						</div>
 					</div>
 				</div>
-
-
-				<!-- Delete Modal -->
-
-
-				<!-- Footer -->
-				<!-- <footer>
-					<p>Copyright © 2022 Dreamguys.</p>					
-				</footer> -->
-				<!-- /Footer -->
+				
+				
 			</div>
 			<!-- /Page Wrapper -->
 
 	</div>
-
-	<script>
-		function updateCompanyStatus(companyId, action) {
-			// Send a request to the server to update the company status
-			fetch(`/update-company-status/${companyId}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ action }),
-			})
-				.then(response => response.json())
-				.then(data => {
-					// Handle the response, maybe update the UI if needed
-					console.log(data);
-
-					// Assuming you want to refresh the page after updating the status
-					window.location.reload();
-				})
-				.catch(error => console.error(error));
-		}
-	</script>
-
-
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<!-- Bootstrap JavaScript -->
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
 		$(document).ready(function () {
+			// Show modal when "Add Card" button is clicked
+			$('#addCardBtn').click(function () {
+				$('#addCardModal').modal('show');
+			});
+		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			// Function to filter employees based on the search query
 			function filterEmployees(query) {
+				// Convert the query to lowercase for case-insensitive matching
 				query = query.toLowerCase();
-				$('.company-row').hide();
-				$('.company-row').each(function () {
+
+				// Hide all rows
+				$('.employee-row').hide();
+
+				// Loop through each row and show if it matches the query
+				$('.employee-row').each(function () {
 					var rowData = $(this).text().toLowerCase();
 					if (rowData.indexOf(query) !== -1) {
 						$(this).show();
@@ -216,20 +213,18 @@
 				});
 			}
 
+			// Event listener for the search input
 			$('#searchEmployeeInput').on('input', function () {
 				var searchQuery = $(this).val();
 				filterEmployees(searchQuery);
 			});
 
-			// Additional part to show modal when "Add Card" button is clicked
+			// Show modal when "Add Card" button is clicked
 			$('#addCardBtn').click(function () {
 				$('#addCardModal').modal('show');
 			});
 		});
 	</script>
-
-
-
 
 	<!-- /Main Wrapper -->
 

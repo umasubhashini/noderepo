@@ -19,7 +19,7 @@ const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
-const LogModel = require('./models/logModel');
+// const LogModel = require('./models/logModel');
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
@@ -97,34 +97,34 @@ app.listen(8000, function () {
 
 
 // Log Model
-const logModel = new LogModel();
+// const logModel = new LogModel();
 
 // Middleware for logging route access
-app.use(async (req, res, next) => {
-    const routeAccessDetails = {
-        method: req.method,
-        path: req.path,
-        query: req.query,
-        params: req.params,
-    };
+// app.use(async (req, res, next) => {
+//     const routeAccessDetails = {
+//         method: req.method,
+//         path: req.path,
+//         query: req.query,
+//         params: req.params,
+//     };
 
-    await logModel.logEvent('route_access', routeAccessDetails);
-    next();
-});
+//     await logModel.logEvent('route_access', routeAccessDetails);
+//     next();
+// });
 
 
 
 // Displaying all the logs
-app.get('/_logs', async (req, res) => {
-  try {
-    const logs = await logModel.getAllLogs();
-    console.log(logs);
-    res.json(logs);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+// app.get('/_logs', async (req, res) => {
+//   try {
+//     const logs = await logModel.getAllLogs();
+//     console.log(logs);
+//     res.json(logs);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 
 
@@ -1296,6 +1296,9 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
   }
 });
 
+
+
+
 app.get('/user-manager', async (req, res) => {
   try {
       const users1 = await fetchUserData();
@@ -1348,6 +1351,8 @@ try {
 }
 });
 
+
+
 app.get('/invitations',async(req,res)=>{
   const employees = await emp.find();
   res.render('admin/invitations',{employees});
@@ -1378,9 +1383,56 @@ app.post('/create-schema', async (req, res) => {
 
     await newDocument.save();
 
-    res.json({ success: true, message: 'DynamicForm created successfully' });
+    res.redirect('/admin/create-schema');
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error'); // Handle errors appropriately
+  }
+});
+
+
+app.get('/download-excel/:companyId', (req, res) => {
+  const companyId = req.params.companyId;
+
+  // Filter employees by company
+  const companyEmployees = emp.filter(employee => employee.company == companyId);
+
+  // Create Excel workbook and worksheet
+  const workbook = new exceljs.Workbook();
+  const worksheet = workbook.addWorksheet('Employees');
+
+  // Add headers
+  worksheet.addRow(['Name', 'Contact', 'Designation']);
+
+  // Add employee data
+  companyEmployees.forEach(employee => {
+      worksheet.addRow([employee.name, employee.contact, employee.designation]);
+  });
+
+  // Set response headers
+  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  res.setHeader('Content-Disposition', 'attachment; filename=employees.xlsx');
+
+  // Send the workbook as a buffer
+  workbook.xlsx.write(res)
+      .then(() => {
+          res.end();
+      })
+      .catch(error => {
+          console.error('Error generating Excel sheet:', error);
+          res.status(500).send('Internal Server Error');
+      });
+});
+
+app.get('/company', async (req, res) => {
+  try {
+    // Fetch the list of companies from your database
+    const companies = await mcompany.find();
+
+    // Render the company.ejs template with the list of companies
+    res.render('admin/company', { companies });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
 });

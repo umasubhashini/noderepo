@@ -1,143 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Employee Information</title>
-    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
-    <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+  <title>Employee Information</title>
+  <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+  <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+  <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
+  <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="/public/assets/admin/css/style.css">
 </head>
 
 <body>
-    <div class="main-wrapper">
-        <!-- Header -->
-        <%- include('header.ejs') -%>
-        <!-- /Header -->
-        <!-- Sidebar -->
-        <%- include('sidebar.ejs') -%>
+  <div class="main-wrapper">
+    <!-- Header -->
+    <%- include('header.ejs') -%>
+      <!-- /Header -->
+      <!-- Sidebar -->
+      <%- include('sidebar.ejs') -%>
 
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card comman-shadow">
-                            <div class="card-body">
-                                <form action="/create-schema" method="post">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h5 class="form-title student-info">Employee Information</h5>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">Select Company</label>
-                                            <div class="col-lg-9">
-                                                <select class="form-control select" name="company_id" id="company_id">
-                                                <% companies.forEach(company => { %>
-                                                <option value="<%= company._id %>"><%= company.name %></option>
-                                                <% }) %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class ="row">
-                                        <div class="col-xl-6">
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">Field:</label>
-                                                <div class="col-lg-9">
-                                                    <input class="form-control" type="text" name="fields[]" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-6">
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">Type:</label>
-                                                <div class="col-lg-9">
-                                                    <input class="form-control" type="text" name="type[]" required>
-                                                </div>
-                                            </div>
-                                            <br>
-                                        </div>
-                                        <div class="col-xl-6">
-                                        <div class="student-submit">
-                                            <button type="button" id="add-field" class="btn btn-primary">Add Field</button>
-                                        </div>
-                                        <br>
-                                        </div> 
-                                    </div>
-                                    <div id="form-fields" class="row"></div>
-                                    <div class="text-end">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
+          <div class="content container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card comman-shadow">
+                  <div class="card-body">
+                    <form action="/create-schema" method="post">
+                      <div class="row">
+                        <div class="col-12">
+                          <h5 class="form-title student-info">Employee Information</h5>
                         </div>
-                     </div>
+                        <div class="form-group row">
+                          <label class="col-lg-3 col-form-label">Select Company</label>
+                          <div class="col-lg-9">
+                            <select class="form-control select" name="company_id" id="company_id">
+                              <% companies.forEach(company=> { %>
+                                <option value="<%= company._id %>">
+                                  <%= company.name %>
+                                </option>
+                                <% }) %>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-6">
+                          <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Field:</label>
+                            <div class="col-lg-9">
+                              <input class="form-control" type="text" name="fields[]" required>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-6">
+                          <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Type:</label>
+                            <div class="col-lg-9">
+                              <input class="form-control" type="text" name="type[]" required>
+                            </div>
+                          </div>
+                          <br>
+                        </div>
+                        <div class="col-xl-6">
+                          <div class="student-submit">
+                            <button type="button" id="add-field" class="btn btn-primary">Add Field</button>
+                          </div>
+                          <br>
+                        </div>
+                      </div>
+                      <div id="form-fields" class="row"></div>
+                      <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
-             </div>
-    </div>
-                             
+              </div>
+            </div>
+          </div>
+        </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const addFieldBtn = document.getElementById('add-field');
-      const formFieldsContainer = document.getElementById('form-fields');
-  
-      addFieldBtn.addEventListener('click', () => {
-        const fieldContainer = document.createElement('div');
-        fieldContainer.className = 'row'; 
-        fieldContainer.innerHTML = `
-          <div class="col-xl-6">
-            <div class="form-group row">
-              <label class="col-lg-3 col-form-label">Field:</label>
-              <div class="col-lg-9">
-                <input class="form-control" type="text" name="fields[]" required>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const addFieldBtn = document.getElementById('add-field');
+            const formFieldsContainer = document.getElementById('form-fields');
+
+            addFieldBtn.addEventListener('click', () => {
+              const fieldContainer = document.createElement('div');
+              fieldContainer.className = 'row';
+              fieldContainer.innerHTML = `
+            <div class="col-xl-6">
+              <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Field:</label>
+                <div class="col-lg-9">
+                  <input class="form-control" type="text" name="fields[]" required>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-xl-6">
-            <div class="form-group row">
-              <label class="col-lg-3 col-form-label">Type:</label>
-              <div class="col-lg-9">
-                <input class="form-control" type="text" name="type[]" required>
+            <div class="col-xl-6">
+              <div class="form-group row">
+                <label class="col-lg-3 col-form-label">Type:</label>
+                <div class="col-lg-9">
+                  <input class="form-control" type="text" name="type[]" required>
+                </div>
               </div>
+              <div class="text-end">
+                <button type="button" class="btn btn-danger delete-field">Delete Field</button>
+              </div>
+              <br>
             </div>
-            <div class="text-end">
-              <button type="button" class="btn btn-danger delete-field">Delete Field</button>
-            </div>
-            <br>
-          </div>
-        `;
-        formFieldsContainer.appendChild(fieldContainer);
-  
-        const deleteFieldBtns = formFieldsContainer.querySelectorAll('.delete-field');
-        deleteFieldBtns.forEach(deleteBtn => {
-          deleteBtn.addEventListener('click', () => {
-            fieldContainer.remove();
+          `;
+              formFieldsContainer.appendChild(fieldContainer);
+
+              const deleteFieldBtn = fieldContainer.querySelector('.delete-field');
+              deleteFieldBtn.addEventListener('click', () => {
+                fieldContainer.remove();
+              });
+            });
           });
-        });
-      });
-    });
-  </script>
-  
-  
-  
-    </body>
-</html>
-    </div>
-    <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
-    <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/public/assets/admin/js/feather.min.js"></script>
-    <script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
-    <script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
-    <script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/public/assets/admin/js/script.js"></script>
+        </script>
+
+
+
+
 </body>
+
+</html>
+</div>
+<script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+<script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/public/assets/admin/js/feather.min.js"></script>
+<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/public/assets/admin/js/script.js"></script>
+</body>
+
 </html>
