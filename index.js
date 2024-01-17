@@ -23,6 +23,7 @@ const Image = require('./models/image');
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
+const invitations = require('./models/invitations');
 
 dotenv.config();
 
@@ -1103,6 +1104,7 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
   });
 
   app.get('/:companyName/:id', async (req, res) => {
+    //Need to fix this to switch case for Invitations
     try {
       const companyName = req.params.companyName;
       const employeeid = req.params.id;
@@ -1180,9 +1182,21 @@ app.put('/update-company-status/:companyId', async (req, res) => {
     }
   });
 
-  
-  app.get('/invitation',async(req,res)=>{
-    res.render('admin/invitations');
+  app.get('/invitations/invite/:invitationId',async(req,res)=>{
+    try{
+      const invitationId = req.params.invitationId;
+    const result  = await invitations.find({
+      invitationId : invitationId
+    })  
+    if(result){
+      res.render('templates/invitations/index', {data : result });
+    }else{
+      console.log("error"); 
+    }
+    }
+    catch(err){
+      console.log(err);
+    }
   });
 
 
@@ -1353,10 +1367,10 @@ try {
 
 
 
-app.get('/invitations',async(req,res)=>{
-  const employees = await emp.find();
-  res.render('admin/invitations',{employees});
-  });
+// app.get('/invitations',async(req,res)=>{
+//   const employees = await emp.find();
+//   res.render('admin/invitations',{employees});
+//   });
 
 
 app.get("/custompages",async(req,res)=>{
