@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Florya Weddings | Wedding & Event Planner</title>
+    <link rel="shortcut icon" href="/public/assets/invitations/img/favicon.png">
+    <link rel="stylesheet" href="../../../css2?family=Didact+Gothic&family=Playfair+Display:ital@0;1&display=swap">
+    <link rel="stylesheet" href="/public/assets/invitations/css/plugins.css">
+    <link rel="stylesheet" href="/public/assets/invitations/css/style.css">
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader-bg"></div>
+    <div id="preloader">
+        <div id="preloader-status">
+            <div class="preloader-position loader"> <span></span> </div>
+        </div>
+    </div>
+    <!-- Progress scroll totop -->
+    <div class="progress-wrap cursor-pointer">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewbox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
+        </svg>
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Logo -->
+            <div class="logo-wrapper">
+                <a class="logo" href="index.html"> <img src="/public/assets/invitations/img/logo.png" class="logo-img" alt=""> </a>
+                <!-- <a class="logo" href="index.html"> <h2>ArchSan <span>Architecture</span></h2> </a> -->
+            </div>
+            <!-- Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"><i class="ti-menu"></i></span> </button>
+            <!-- Menu -->
+            <!-- <div class="collapse navbar-collapse" id="navbar">
+               
+            </div> -->
+        </div>
+    </nav>
+    <!-- Slider -->
+    <header class="header slider-fade">
+        <div class="owl-carousel owl-theme">
+            <% sliders.sliderOne.forEach((slide) => { %>
+                <div class="item bg-img" data-overlay-dark="2" data-background="<%= slide.image %>">
+                    <div class="v-middle caption">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 slider-text js-fullheight">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h4 style="<%= getInlineStylesForText(slide.style) %>"><%= slide.text %></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+            <% sliders.sliderTwo.forEach((slide) => { %>
+                <div class="item bg-img" data-overlay-dark="2" data-background="<%= slide.image %>">
+                    <div class="v-middle caption">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 slider-text js-fullheight">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h4 style="<%= getInlineStylesForText(slide.style) %>"><%= slide.text %></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+            <% sliders.sliderThree.forEach((slide) => { %>
+                <div class="item bg-img" data-overlay-dark="2" data-background="<%= slide.image %>">
+                    <div class="v-middle caption">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 slider-text js-fullheight">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h4 style="<%= getInlineStylesForText(slide.style) %>""><%= slide.text %></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+
+        </div>
+    </header>
+    
+
+
+    <!-- About Florya Weddings -->
+
+    <section class="about section-padding bg-green">
+        <div class="container">
+            <div class="row">
+                <% if (Array.isArray(message)) { %>
+                    <% message.forEach(function(item) { %>
+                        <div class="col-md-6 animate-box" data-animate-effect="fadeInUp">
+                            <div class="section-subtitle white"><%= item.Heading.text %></div>
+                            <div class="section-title white"><%= item.SubHeading.text %> <span class="white" style="<%= item.SubHeading.style %>"><%= item.SubHeading.text %></span></div>
+                            <p><%= item.text %></p>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No data available</p>
+                <% } %>
+                <div class="butn-light mt-15"> <a href="about.html"><span>Find out more</span></a> </div>
+            </div>
+        </div>
+    </section>
+    
+
+    
+
+    
+
+
+    <!-- Services -->
+    <section class="services section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 mb-30">
+                    <div class="section-subtitle">The experience</div>
+                    <div class="section-title">Explore <span>Services</span></div>
+                </div>
+                <div class="col-md-7 mb-30">
+                    <p>Professional Wedding & Event Planner surabit aliquet orci elit gene tristisue in lorem dream vitae alisuam tincidunt felis sed gravida aliquam nemue libero hendrerit magna sit amenta the mollis lacus huam maurisine alisuam erat volutfat.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="position-re o-hidden"> <img src="/public/assets/invitations/img/services/1.jpg" alt=""> </div>
+                            <div class="con">
+                                <h5><a href="services-page.html">Wedding <span>Planner</span></a> </h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="position-re o-hidden"> <img src="img/services/5.jpg" alt=""> </div>
+                            <div class="con">
+                                <h5><a href="services-page.html">Master of <span>Ceremonies</span></a> </h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col-md-12 text-right">
+                                        <div class="permalink"><a href="services-page.html">Explore <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="position-re o-hidden"> <img src="/public/assets/invitations/img/services/6.jpg" alt=""> </div>
+                            <div class="con">
+                                <h5><a href="services-page.html">Special <span>Events</span></a> </h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col-md-12 text-right">
+                                        <div class="permalink"><a href="services-page.html">Explore <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="position-re o-hidden"> <img src="/public/assets/invitations/img/services/2.jpg" alt=""> </div>
+                            <div class="con">
+                                <h5><a href="services-page.html"><span>Birthday</span> Planner</a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="position-re o-hidden"> <img src="/public/assets/invitations/img/services/3.jpg" alt=""> </div>
+                            <div class="con">
+                                <h5><a href="services-page.html">Destination <span>Wedding</span></a> </h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col-md-12 text-right">
+                                        <div class="permalink"><a href="services-page.html">Explore <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="position-re o-hidden"> <img src="/public/assets/invitations/img/services/4.jpg" alt=""> </div>
+                            <div class="con">
+                                <h5><a href="services-page.html">Corporate <span>Events</span></a></h5>
+                                <div class="line"></div>
+                                <div class="row facilities">
+                                    <div class="col-md-12 text-right">
+                                        <div class="permalink"><a href="services-page.html">Explore <i class="ti-arrow-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testiominals -->
+    <section class="testimonials">
+        <div class="background bg-img bg-fixed section-padding pb-0" data-background="/public/assets/invitations/img/slider/17.jpg" data-overlay-dark="5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2 text-center">
+                        <div class="testimonials-box">
+                            <div class="owl-carousel owl-theme">
+                                <div class="item"> <span>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                    </span>
+                                    <h5>" If you manage to get Samantha as your wedding planner, you are one lucky couple. We highly recommend! "</h5>
+                                    <div class="info">
+                                        <div class="cont">
+                                            <h6>Emily & Enrico <i>|</i> <span><a href="portfolio-page.html">View the wedding</a></span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item"> <span>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                    </span>
+                                    <h5>" If you manage to get Duru as your wedding planner, you are one lucky couple. We highly recommend! "</h5>
+                                    <div class="info">
+                                        <div class="cont">
+                                            <h6>Cynthia & Carl <i>|</i> <span><a href="portfolio-page.html">View the wedding</a></span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item"> <span>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                        <i class="star-rating"></i>
+                                    </span>
+                                    <h5>" If you manage to get Duru as your wedding planner, you are one lucky couple. We highly recommend! "</h5>
+                                    <div class="info">
+                                        <div class="cont">
+                                            <h6>Lauren & Wayne <i>|</i> <span><a href="portfolio-page.html">View the wedding</a></span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Us -->
+    <!-- <section class="about2 cover section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-30 animate-box" data-animate-effect="fadeInUp">
+                    <div class="section-subtitle">About Us</div>
+                    <div class="section-title">Florya <span>Weddings</span></div>
+                    <p>You can choose any country with good tourism wedding elementum sesue the aucan vestibulum aliquam justo in sapien rutrum volutpat. Donec in quis the pellentesque velit florya id velit ac arcu posuere blane.</p>
+                    <p>Wedding nissuam nestibulum ac quam nec odio elementum ceisue the miss varius natoque penatibus et magnis dis parturient monte.</p>
+                    <ul class="list-unstyled about-list mb-30">
+                        <li>
+                            <div class="about-list-icon"> <span class="ti-check"></span> </div>
+                            <div class="about-list-text">
+                                <p>20 Years of Experience</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="about-list-icon"> <span class="ti-check"></span> </div>
+                            <div class="about-list-text">
+                                <p>250+ Wedding Planner</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <hr class="border">
+                    <div class="about-bottom"> <img src="/public/assets/invitations/img/signature-dark.svg" alt="" class="image about-signature">
+                        <div class="about-name-wrapper">
+                            <div class="about-name">Samantha Megan</div>
+                            <div class="about-rol">Wedding Planner</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 offset-md-1 animate-box" data-animate-effect="fadeInUp">
+                    <div class="img-exp">
+                        <div class="about-img">
+                            <div class="img"> <img src="/public/assets/invitations/img/about.jpg" class="img-fluid" alt=""> </div>
+                        </div>
+                        <div id="circle">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewbox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
+                                <defs>
+                                    <path id="circlePath" d=" M 150, 150 m -60, 0 a 60,60 0 0,1 120,0 a 60,60 0 0,1 -120,0 "></path>
+                                </defs>
+                                <circle cx="150" cy="100" r="75" fill="none"></circle>
+                                <g>
+                                    <use xlink:href="#circlePath" fill="none"></use>
+                                    <text fill="#575c57">
+                                        <textpath xlink:href="#circlePath"> . florya weddings . planner </textpath>
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <!-- Wedding Dates -->
+
+    <section class="section-padding bg-green">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="section-subtitle white">Dateline</div>
+                    <div class="section-title white">Contact <span class="white">Us</span></div>
+                    <p class="white">Your at-a-glance guide to where I stand on all the truly important things. Wedding elit miss the eget the solin miss citudino selus rutrum in miss vestibulum eleifen ornare torto.</p>
+                    <div class="butn-light mt-15 mb-30"> <a href="contact.html"><span>Get in touch</span></a> </div>
+                </div>
+                <div class="col-md-6 offset-md-1">
+                    <table class="wedding-date-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h6>Phone</h6>
+                                </td>
+                                <td>
+                                    <p><%= contact.phone%></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h6>Mail <br></h6>
+                                </td>
+                                <td>
+                                    <p><%= contact.email %></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h6>Website </h6>
+                                </td>
+                                <td>
+                                   <a href="<%= contact.website %>"><p><%= contact.website %></p></a>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Portfolio -->
+    <section class="portfolio section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-30">
+                    <div class="section-subtitle">Works</div>
+                    <div class="section-title">Our <span>Portfolio</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="owl-carousel owl-theme">
+                        <div class="square-flip">
+                            <div class="square bg-img" data-background="/public/assets/invitations/img/couple/5.jpg">
+                                <div class="square-container d-flex align-items-end justify-content-end">
+                                    <div class="box-title">
+                                        <h4>C & C</h4>
+                                        <h6>Lakewood WA, USA</h6>
+                                    </div>
+                                </div>
+                                <!-- <div class="flip-overlay"></div> -->
+                            </div>
+                            <div class="square2 bg-green">
+                                <div class="square-container2">
+                                    <h4>Cynthia & Carl</h4>
+                                    <p>Lorem nissuam nestibulum duru quam the odion elementum ceisue the misse varie natoque enatibus et dis monte.</p>
+                                    <div class="row portfolio-list mb-30">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                <li>Wedding Planner : Rachel Starletta</li>
+                                                <li>Photographer : Janet Lewis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-line"><a href="portfolio-page.html">Find out more</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="square-flip">
+                            <div class="square bg-img" data-background="img/couple/3.jpg">
+                                <div class="square-container d-flex align-items-end justify-content-end">
+                                    <div class="box-title">
+                                        <h4>L & W</h4>
+                                        <h6>Green House, Manhattan</h6>
+                                    </div>
+                                </div>
+                                <div class="flip-overlay"></div>
+                            </div>
+                            <div class="square2 bg-green">
+                                <div class="square-container2">
+                                    <h4>Lauren & Wayne</h4>
+                                    <p>Lorem nissuam nestibulum duru quam the odion elementum ceisue the misse varie natoque enatibus et dis monte.</p>
+                                    <div class="row portfolio-list mb-30">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                <li>Wedding Planner : Rachel Starletta</li>
+                                                <li>Photographer : Janet Lewis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-line"><a href="portfolio-page.html">Find out more</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="square-flip">
+                            <div class="square bg-img" data-background="/public/assets/invitations/img/couple/4.jpg">
+                                <div class="square-container d-flex align-items-end justify-content-end">
+                                    <div class="box-title">
+                                        <h4>H & H</h4>
+                                        <h6>Level Park, Oxfordshire</h6>
+                                    </div>
+                                </div>
+                                <div class="flip-overlay"></div>
+                            </div>
+                            <div class="square2 bg-green">
+                                <div class="square-container2">
+                                    <h4>Heather & Henry</h4>
+                                    <p>Lorem nissuam nestibulum duru quam the odion elementum ceisue the misse varie natoque enatibus et dis monte.</p>
+                                    <div class="row portfolio-list mb-30">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                <li>Wedding Planner : Rachel Starletta</li>
+                                                <li>Photographer : Janet Lewis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-line"><a href="portfolio-page.html">Find out more</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="square-flip">
+                            <div class="square bg-img" data-background="img/couple/2.jpg">
+                                <div class="square-container d-flex align-items-end justify-content-end">
+                                    <div class="box-title">
+                                        <h4>E & M</h4>
+                                        <h6>Gold Park CA, USA</h6>
+                                    </div>
+                                </div>
+                                <div class="flip-overlay"></div>
+                            </div>
+                            <div class="square2 bg-green">
+                                <div class="square-container2">
+                                    <h4>Emily & Micheal</h4>
+                                    <p>Lorem nissuam nestibulum duru quam the odion elementum ceisue the misse varie natoque enatibus et dis monte.</p>
+                                    <div class="row portfolio-list mb-30">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                <li>Wedding Planner : Rachel Starletta</li>
+                                                <li>Photographer : Janet Lewis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-line"><a href="portfolio-page.html">Find out more</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="square-flip">
+                            <div class="square bg-img" data-background="img/couple/1.jpg">
+                                <div class="square-container d-flex align-items-end justify-content-end">
+                                    <div class="box-title">
+                                        <h4>S & R</h4>
+                                        <h6>Silver Park, Oxfordshire</h6>
+                                    </div>
+                                </div>
+                                <div class="flip-overlay"></div>
+                            </div>
+                            <div class="square2 bg-green">
+                                <div class="square-container2">
+                                    <h4>Sophia & Robert</h4>
+                                    <p>Lorem nissuam nestibulum duru quam the odion elementum ceisue the misse varie natoque enatibus et dis monte.</p>
+                                    <div class="row portfolio-list mb-30">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                <li>Wedding Planner : Rachel Starletta</li>
+                                                <li>Photographer : Janet Lewis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-line"><a href="portfolio-page.html">Find out more</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="square-flip">
+                            <div class="square bg-img" data-background="img/couple/6.jpg">
+                                <div class="square-container d-flex align-items-end justify-content-end">
+                                    <div class="box-title">
+                                        <h4>O & J</h4>
+                                        <h6>Blue House, London</h6>
+                                    </div>
+                                </div>
+                                <div class="flip-overlay"></div>
+                            </div>
+                            <div class="square2 bg-green">
+                                <div class="square-container2">
+                                    <h4>Olivia & John</h4>
+                                    <p>Lorem nissuam nestibulum duru quam the odion elementum ceisue the misse varie natoque enatibus et dis monte.</p>
+                                    <div class="row portfolio-list mb-30">
+                                        <div class="col-md-12">
+                                            <ul>
+                                                <li>Wedding Planner : Rachel Starletta</li>
+                                                <li>Photographer : Janet Lewis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-line"><a href="portfolio-page.html">Find out more</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Promo Video -->
+    <section class="video-wrapper video section-padding bg-img bg-fixed" data-overlay-dark="4" data-background="img/slider/15.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2 text-center">
+                    <div class="section-subtitle"><span>Be Inspired</span></div>
+                    <div class="section-title white">Latest wedding <span>Video</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center col-md-12">
+                    <a class="vid" href="https://youtu.be/4hCOTCCTThs">
+                        <div class="vid-butn"> <span class="icon">
+                                <i class="ti-control-play"></i>
+                            </span> </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Pricing -->
+  
+    <!-- Blog -->
+    
+    <!-- Signup -->
+  
+    <!-- Clients -->
+    
+    <!-- Footer -->
+    <footer class="footer">
+     
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="footer-bottom-inner">
+                            <p class="footer-bottom-copy-right">© Copyright 2023 by <a href="https://ecardify.takshalabs.in/" target="_blank">Ecardify</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- jQuery -->
+    <script src="/public/assets/invitations/js/jquery-3.6.3.min.js"></script>
+    <script src="/public/assets/invitations/js/jquery-migrate-3.0.0.min.js"></script>
+    <script src="/public/assets/invitations/js/modernizr-2.6.2.min.js"></script>
+    <script src="/public/assets/invitations/js/imagesloaded.pkgd.min.js"></script>
+    <script src="/public/assets/invitations/js/jquery.isotope.v3.0.2.js"></script>
+    <script src="/public/assets/invitations/js/pace.js"></script>
+    <script src="/public/assets/invitations/js/popper.min.js"></script>
+    <script src="/public/assets/invitations/js/bootstrap.min.js"></script>
+    <script src="/public/assets/invitations/js/scrollIt.min.js"></script>
+    <script src="/public/assets/invitations/js/jquery.waypoints.min.js"></script>
+    <script src="/public/assets/invitations/js/owl.carousel.min.js"></script>
+    <script src="/public/assets/invitations/js/jquery.stellar.min.js"></script>
+    <script src="/public/assets/invitations/js/jquery.magnific-popup.js"></script>
+    <script src="/public/assets/invitations/js/YouTubePopUp.js"></script>
+    <script src="/public/assets/invitations/js/smooth-scroll.min.js"></script>
+    <script src="/public/assets/invitations/js/custom.js"></script>
+</body>
+
+</html>
