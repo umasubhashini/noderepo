@@ -1,20 +1,19 @@
 const mongoose = require('mongoose');
 
 const invitationPageSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  invitationType : { type: String, required: true },
-  invitationId : { type : mongoose.Schema.Types.ObjectId, required: true }, 
+  username: { type: String , required: true },
+  invitationType : { type: String, required: true }, 
     header : {
-      title : 
+    title : 
           {
             text : { type : String, required: true },
             style : { type : String, required: true }
           },
-        navBanner : 
-            {
+    navBanner : 
+          {
               text : { type : String, required: true },
               style : { type : String, required: true }
-            }    
+          }    
     },
   sliders:{
     sliderOne : [
@@ -22,7 +21,7 @@ const invitationPageSchema = new mongoose.Schema({
         image : { type : String, required: true },
         style : { type : String, required: true },
         text : { type : String, required: true },
-        action : { type : String, required: true },
+        action : { type : String, required: true,default:1 },
 
       }
     ],
@@ -31,7 +30,7 @@ const invitationPageSchema = new mongoose.Schema({
         image : { type : String, required: true },
         style : { type : String, required: true },
         text : { type : String, required: true },
-        action : { type : String, required: true },
+        action : { type : String, required: true,default:1 },
 
       }
     ],
@@ -40,7 +39,7 @@ const invitationPageSchema = new mongoose.Schema({
         image : { type : String, required: true },
         style : { type : String, required: true },
         text : { type : String, required: true },
-        action : { type : String, required: true },
+        action : { type : String, required: true,default:1 },
 
       }
     ]
