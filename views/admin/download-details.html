@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Management</title>
+</head>
+<body>
+  <h1>Employee Management</h1>
+  <form action="/upload/<%= company %>" method="post" enctype="multipart/form-data">
+    <label for="file">Upload Excel File:</label>
+    <input type="file" name="file" required>
+    <button type="submit">Upload</button>
+  </form>
+
+  <hr>
+
+  <label for="company">Select Company:</label>
+  <select id="company" onchange="location = this.value;">
+    <option disabled selected>Select Company</option>
+    <% companies.forEach(company => { %>
+      <option value="/download/<%= company %>"><%= company %></option>
+    <% }); %>
+  </select>
+
+  <hr>
+
+  <button onclick="downloadExcel()">Download Excel</button>
+
+  <script>
+    function downloadExcel() {
+      const selectedCompany = document.getElementById('company').value;
+      if (selectedCompany) {
+        window.location.href = selectedCompany;
+      }
+    }
+  </script>
+</body>
+</html>

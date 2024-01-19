@@ -1,8 +1,8 @@
-const conn = require('./connection');
-const express = require('express');
-const session = require('express-session');
+const conn = require("./connection");
+const express = require("express");
+const session = require("express-session");
 const bodyParser = require("body-parser");
-const e = require('express');
+const e = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
@@ -15,15 +15,16 @@ const mcompany = require("./models/company");
 const emp = require("./models/employee");
 const dfields = require("./models/dynamicschema");
 const bcrypt = require("bcrypt");
-const path = require('path');
-const adminModel = require('./models/admin');
-const multer = require('multer');
-const Image = require('./models/image');
-const LogModel = require('./models/logModel');
-const { ObjectId } = require('mongodb');
-const AWS = require('aws-sdk');
-const dotenv = require('dotenv');
-const invitations = require('./models/invitations');
+const path = require("path");
+const adminModel = require("./models/admin");
+const multer = require("multer");
+const Image = require("./models/image");
+// const LogModel = require('./models/logModel');
+const { ObjectId } = require("mongodb");
+const AWS = require("aws-sdk");
+const dotenv = require("dotenv");
+const invitations = require("./models/invitations");
+const exceljs = require("exceljs");
 const AdmZip = require('adm-zip');
 
 dotenv.config();
@@ -40,16 +41,18 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
-app.use('/public', express.static(__dirname + "/public"));
+app.use("/public", express.static(__dirname + "/public"));
 
-const fs = require('fs');
-const defaultSessionSecret = 'mydefaultsecretkey';
+const fs = require("fs");
+const defaultSessionSecret = "mydefaultsecretkey";
 
-app.use(session({
-  secret: defaultSessionSecret,
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: defaultSessionSecret,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -59,7 +62,6 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -67,7 +69,6 @@ const upload = multer({ storage: storage });
 app.get('/', function (req, res) {
   res.render('landing/index');
 });
-
 
 app.get('/login', async (req, res) => {
   res.render('login/login');
@@ -99,7 +100,7 @@ app.listen(8000, function () {
 
 
 // Log Model
-const logModel = new LogModel();
+// const logModel = new LogModel();
 
 // Middleware for logging route access
 app.use(async (req, res, next) => {
@@ -117,38 +118,112 @@ app.use(async (req, res, next) => {
 
 
 // Displaying all the logs
-app.get('/_logs', async (req, res) => {
-  try {
-    const logs = await logModel.getAllLogs();
-    console.log(logs);
-    res.json(logs);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+// app.get('/_logs', async (req, res) => {
+//   try {
+//     const logs = await logModel.getAllLogs();
+//     console.log(logs);
+//     res.json(logs);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 
-app.get('/invitations/invite/:invitationId', async (req, res) => {
-  try {
-    const invitationId = req.params.invitationId;
-    const result = await invitations.findById({ _id: invitationId });
-    console.log(result);
-    if (result) {
-      res.render('templates/invitations/index', { result });
-    } else {
-      console.log("error");
+
+  // edit the company details if the comapny has already schema preview it and edit or else disply that the comapny has no schema
+
+  app.get("/edit-company/:companyId", async (req, res) => {
+    try {
+      const companyId = req.params.companyId;
+      const companySchema = await dfields.findOne({ company_id: companyId });
+  
+      if(!companySchema) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
+      res.render("admin/edit-company-schema", { companySchema });
+
+    } catch (error) {
+      console.error('Error fetching company schema:', error);
+      
     }
-  }
-  catch (err) {
-    console.log(err);
+  })
+
+// update the schema of the company 
+
+app.post("/edit-company-schema/:companyId", async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
+    const companySchema = await dfields.findOne({ company_id: companyId });
+
+    if(!companySchema) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    const updatedFields = req.body.fields;
+    const updatedTypes = req.body.type;
+
+    companySchema.fields = updatedFields.map((field, index) => ({
+      name: field,
+      type: updatedTypes[index],
+    }));
+
+    await companySchema.save();
+
+    res.redirect('/edit-company/' + companyId); // Redirect to the edit page or another suitable route
+
+  } catch (error) {
+    console.error('Error updating company schema:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
+  
 
-app.get('/admin', async (req, res) => {
+
+
+
+
+
+// to delete the company by using the comapny id 
+
+app.get("/delete-company/:companyId", async (req, res) => {
   try {
-    const admin = await adminModel.findOne({ username: 'admins', password: 'admin' });
+    const companyId = req.params.companyId;
+    const company = await mcompany.findByIdAndDelete(companyId);
+
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
+    // Delete the image from S3
+    const key = `company_logo/${company._id}`;
+    const s3DeleteParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    };
+
+    await s3.deleteObject(s3DeleteParams).promise();
+
+    // Fetch companies data
+    const companies = await mcompany.find(); // Assuming you have a model named Company
+
+    res.render("admin/company", { companies });
+  } catch (error) {
+    console.error("Error deleting company:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+);
+
+
+app.get("/admin", async (req, res) => {
+  try {
+    const admin = await adminModel.findOne({
+      username: "admins",
+      password: "admin",
+    });
 
     if (admin) {
       // If the admin credentials are found, render the admin dashboard using EJS
@@ -221,7 +296,7 @@ app.post('/edit-subscription', async (req, res) => {
   }
 });
 
-// getting subscription details 
+// getting subscription details
 
 app.get('/add-subscription', async (req, res) => {
   try {
@@ -285,7 +360,7 @@ app.post('/edit-subscription/:id', async (req, res) => {
     const existingPlan = await SubscriptionPlan.findById(planId);
 
     if (!existingPlan) {
-      return res.status(404).json({ error: 'Subscription plan not found' });
+      return res.status(404).json({ error: "Subscription plan not found" });
     }
 
 
@@ -302,10 +377,10 @@ app.post('/edit-subscription/:id', async (req, res) => {
 
     await existingPlan.save();
     const subscriptionPlans = await SubscriptionPlan.find();
-    res.render('admin/subscription', { subscriptionPlans });
+    res.render("admin/subscription", { subscriptionPlans });
   } catch (error) {
-    console.error('Error updating subscription plan:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error updating subscription plan:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -358,7 +433,7 @@ app.post('/update-cards', async (req, res) => {
     const user = await User.findOne({ number: number });
 
     if (!user) {
-      return res.status(404).send('User not found');
+      return res.status(404).send("User not found");
     }
 
     // Push the new card details and subscription plan to the user's selectedItems array
@@ -381,8 +456,8 @@ app.post('/update-cards', async (req, res) => {
     res.render('admin/user', { users1 });
 
   } catch (error) {
-    console.error('Error adding card:', error);
-    return res.status(500).send('Internal Server Error');
+    console.error("Error adding card:", error);
+    return res.status(500).send("Internal Server Error");
   }
 });
 
@@ -397,7 +472,6 @@ app.get('/user-details', async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 const fetchUserData = async () => {
   try {
@@ -457,7 +531,7 @@ app.get('/get-cards/:userId', async (req, res) => {
 });
 
 //card deletion code
-app.post('/delete-card/:userId', async (req, res) => {
+app.post("/delete-card/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const cardId = req.body.cardId;
@@ -491,10 +565,10 @@ app.post('/delete-card/:userId', async (req, res) => {
     });
 
     const users1 = await fetchUserData();
-    res.render('admin/user', { users1 }); // Redirect to home or any desired route
+    res.render("admin/user", { users1 }); // Redirect to home or any desired route
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -714,12 +788,6 @@ app.post('/edit-user/:userId', async (req, res) => {
   }
 });
 
-
-
-
-
-
-
 app.get('/template1', (req, res) => {
   // Retrieve fixed values from query parameters
   const subscriptionPlanId = req.query.subscriptionPlan;
@@ -817,84 +885,97 @@ app.get('/cardlist', async (req, res) => {
   }
 });
 
+app.post(
+  "/businesscard/:userId",
+  upload.fields([
+    { name: "Image", maxCount: 1 },
+    { name: "bgImage", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const selectedItems = req.body.selectedItems;
+      const selectedItemsObject = JSON.parse(selectedItems);
+      const businessid = selectedItemsObject._id;
 
-app.post('/businesscard/:userId', upload.fields([
-  { name: 'Image', maxCount: 1 },
-  { name: 'bgImage', maxCount: 1 }
-]), async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const selectedItems = req.body.selectedItems;
-    const selectedItemsObject = JSON.parse(selectedItems);
-    const businessid = selectedItemsObject._id;
+      const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
+      const plan = subscriptionPlan.plan || "";
+      const templateId = selectedItemsObject.template;
+      const cardid = selectedItemsObject.cardType;
+      const occasion = selectedItemsObject.occasion;
+      const template = await temp.findById(templateId).lean();
 
-    const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
-    const plan = subscriptionPlan.plan || '';
-    const templateId = selectedItemsObject.template;
-    const cardid = selectedItemsObject.cardType;
-    const occasion = selectedItemsObject.occasion;
-    const template = await temp.findById(templateId).lean();
+      // Extract the files from req.files
+      const images = req.files["Image"] ? req.files["Image"][0] : null;
+      const bgImage = req.files["bgImage"] ? req.files["bgImage"][0] : null;
 
-    // Extract the files from req.files
-    const images = req.files['Image'] ? req.files['Image'][0] : null;
-    const bgImage = req.files['bgImage'] ? req.files['bgImage'][0] : null;
+      const templateFields =
+        template.fields &&
+        template.fields.map((field) => ({
+          fieldName: field.name,
+          fieldValue: req.body[field.name] || "",
+        }));
 
-    const templateFields = template.fields && template.fields.map(field => ({
-      fieldName: field.name,
-      fieldValue: req.body[field.name] || '',
-    }));
-
-    const uploadToS3 = async (file, folder, filenamePrefix) => {
-      const key = `${userId}_${cardid}_${templateId}_${plan}_${occasion}_${filenamePrefix}`;
-      const s3Params = {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: `${folder}/${key}`,
-        Body: file.buffer,
-        ContentType: file.mimetype,
+      const uploadToS3 = async (file, folder, filenamePrefix) => {
+        const key = `${userId}_${cardid}_${templateId}_${plan}_${occasion}_${filenamePrefix}`;
+        const s3Params = {
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: `${folder}/${key}`,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        };
+        const s3UploadResponse = await s3.upload(s3Params).promise();
+        return s3UploadResponse.Location;
       };
-      const s3UploadResponse = await s3.upload(s3Params).promise();
-      return s3UploadResponse.Location;
-    };
 
-    const image1Url = images ? await uploadToS3(images, 'cards_img', 'image') : null;
-    const image2Url = bgImage ? await uploadToS3(bgImage, 'cards_img', 'bgimage') : null;
+      const image1Url = images
+        ? await uploadToS3(images, "cards_img", "image")
+        : null;
+      const image2Url = bgImage
+        ? await uploadToS3(bgImage, "cards_img", "bgimage")
+        : null;
 
-    console.log(templateFields);
+      console.log(templateFields);
 
-    const filter = {
-      user: userId,
-      selectedCardType: cardid,
-      selectedTemplate: templateId,
-      selectedSubscriptionPlan: plan,
-      _id: businessid
-    };
+      const filter = {
+        user: userId,
+        selectedCardType: cardid,
+        selectedTemplate: templateId,
+        selectedSubscriptionPlan: plan,
+        _id: businessid,
+      };
 
-    const update = {
-      user: userId,
-      selectedCardType: cardid,
-      selectedTemplate: templateId,
-      selectedSubscriptionPlan: plan,
-      templateFields: templateFields,
-      Image: image1Url,
-      bgImg: image2Url,
-      bgColor: req.body.bgColor || '',
-    };
+      const update = {
+        user: userId,
+        selectedCardType: cardid,
+        selectedTemplate: templateId,
+        selectedSubscriptionPlan: plan,
+        templateFields: templateFields,
+        Image: image1Url,
+        bgImg: image2Url,
+        bgColor: req.body.bgColor || "",
+      };
 
-    const options = {
-      upsert: true, // Creates a new document if no documents match the filter
-      new: true, // Returns the modified document if found or the upserted document if created
-    };
+      const options = {
+        upsert: true, // Creates a new document if no documents match the filter
+        new: true, // Returns the modified document if found or the upserted document if created
+      };
 
-    const savedBusinessCard = await BusinessCard.findOneAndUpdate(filter, update, options);
-    console.log(savedBusinessCard);
+      const savedBusinessCard = await BusinessCard.findOneAndUpdate(
+        filter,
+        update,
+        options
+      );
+      console.log(savedBusinessCard);
 
-    const users1 = await fetchUserData();
-    res.render('admin/user', { users1 });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+      const users1 = await fetchUserData();
+      res.render("admin/user", { users1 });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
-});
+);
 
 
 
@@ -916,9 +997,6 @@ app.post('/delete-user/:userId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
 
 function mapFields(formData, section) {
   const fieldNames = formData[`${section}Names`] || [];
@@ -980,7 +1058,7 @@ app.post('/custompage/:id', upload.fields([{ name: 'image', maxCount: 1 }]), asy
 
     const s3UploadResponse = await s3.upload(params).promise();
 
-    const logoUrl = s3UploadResponse.Location;
+      const logoUrl = s3UploadResponse.Location;
 
 
     // Save the image to MongoDB
@@ -995,24 +1073,22 @@ app.post('/custompage/:id', upload.fields([{ name: 'image', maxCount: 1 }]), asy
       socialMediaFields: socialMediaFields,
     });
 
-    // Save the data to MongoDB
-    await customizablePage.save();
-    console.log(customizablePage);
-    res.status(201).send('Form submitted successfully!');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+      // Save the data to MongoDB
+      await customizablePage.save();
+      console.log(customizablePage);
+      res.status(201).send("Form submitted successfully!");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
   }
-
-});
-
+);
 
 app.get('/add-company', async (req, res) => {
   res.render('admin/add-company');
 });
 
-
-app.post('/company-details', upload.single('logo'), async (req, res) => {
+app.post("/company-details", upload.single("logo"), async (req, res) => {
   const { name, cname, cnum, cmail } = req.body;
   console.log(req.body);
   const file = req.file;
@@ -1024,7 +1100,7 @@ app.post('/company-details', upload.single('logo'), async (req, res) => {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: `company_logo/${key}`,
     Body: file.buffer,
-    ContentType: file.mimetype
+    ContentType: file.mimetype,
   };
 
   const s3UploadResponse = await s3.upload(params).promise();
@@ -1197,18 +1273,34 @@ app.put('/update-company-status/:companyId', async (req, res) => {
   }
 });
 
+app.get("/invitations/invite/:invitationId", async (req, res) => {
+  try {
+    const invitationId = req.params.invitationId;
+    const result = await invitations.find({
+      invitationId: invitationId,
+    });
+    if (result) {
+      res.render("templates/invitations/index", { data: result });
+    } else {
+      console.log("error");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
 
-app.get('/employee-list', async (req, res) => {
+app.get("/employee-list", async (req, res) => {
   const employees = await emp.find();
   const companies = await mcompany.find();
-  res.render('admin/employees-list', { employees, companies });
-
-}
-);
+  res.render("admin/employees-list", { employees, companies });
+});
 
 // Post request to update employee details
-app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) => {
-  const employeeId = req.params.employeeId;
+app.post(
+  "/edit-employee/:employeeId",
+  upload.single("photo"),
+  async (req, res) => {
+    const employeeId = req.params.employeeId;
 
   try {
     // Retrieve the employee by ID
@@ -1259,8 +1351,7 @@ app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) 
   }
 });
 
-
-app.get('/edit-employee/:employeeId', async (req, res) => {
+app.get("/edit-employee/:employeeId", async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
     const employee = await emp.findById(employeeId);
@@ -1277,14 +1368,13 @@ app.get('/edit-employee/:employeeId', async (req, res) => {
   }
 });
 
-
-app.get('/delete-employee/:employeeId', async (req, res) => {
+app.get("/delete-employee/:employeeId", async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
     const employee = await emp.findByIdAndDelete(employeeId);
 
     if (!employee) {
-      return res.status(404).json({ error: 'Employee not found' });
+      return res.status(404).json({ error: "Employee not found" });
     }
 
     // Delete the image from S3
@@ -1296,19 +1386,18 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
 
     await s3.deleteObject(s3DeleteParams).promise();
 
-
     // Fetch companies data
     const companies = await mcompany.find(); // Assuming you have a model named Company
 
     const employees = await emp.find();
-    res.render('admin/employees-list', { employees, companies });
+    res.render("admin/employees-list", { employees, companies });
   } catch (error) {
-    console.error('Error deleting employee:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error deleting employee:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
-app.get('/user-manager', async (req, res) => {
+app.get("/user-manager", async (req, res) => {
   try {
     const users1 = await fetchUserData();
     res.render('admin/user-manager', { users1 });
@@ -1373,19 +1462,22 @@ app.get('/create-schema', async (req, res) => {
   res.render('admin/create-schema', { companies });
 });
 
-app.post('/create-schema', async (req, res) => {
+app.post("/create-schema", async (req, res) => {
   try {
 
     const { company_id, fields, type } = req.body;
     console.log(req.body);
     const newDocument = new dfields({
       company_id,
-      fields: fields.map((field, index) => ({ name: field, type: type[index] })),
+      fields: fields.map((field, index) => ({
+        name: field,
+        type: type[index],
+      })),
     });
 
     await newDocument.save();
 
-    res.json({ success: true, message: 'DynamicForm created successfully' });
+    res.redirect("/admin/create-schema");
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error'); // Handle errors appropriately

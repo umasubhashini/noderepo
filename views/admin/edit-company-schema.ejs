@@ -33,30 +33,19 @@
               <div class="col-sm-12">
                 <div class="card comman-shadow">
                   <div class="card-body">
-                    <form action="/create-schema" method="post">
-                      <div class="row">
-                        <div class="col-12">
-                          <h5 class="form-title student-info">Employee Information</h5>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-lg-3 col-form-label">Select Company</label>
-                          <div class="col-lg-9">
-                            <select class="form-control select" name="company_id" id="company_id">
-                              <% companies.forEach(company=> { %>
-                                <option value="<%= company._id %>">
-                                  <%= company.name %>
-                                </option>
-                                <% }) %>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
+                   <!-- Inside the form in create-schema.ejs -->
+
+                   <form action="/edit-company-schema/<%= companySchema._id %>" method="post">
+                    <!-- ... other form fields ... -->
+                  
+                    <!-- Iterate over existing fields in the company schema -->
+                    <% companySchema.fields.forEach((field, index) => { %>
                       <div class="row">
                         <div class="col-xl-6">
                           <div class="form-group row">
                             <label class="col-lg-3 col-form-label">Field:</label>
                             <div class="col-lg-9">
-                              <input class="form-control" type="text" name="fields[]" required>
+                              <input class="form-control" type="text" name="fields[]" value="<%= field.name %>" required>
                             </div>
                           </div>
                         </div>
@@ -64,23 +53,20 @@
                           <div class="form-group row">
                             <label class="col-lg-3 col-form-label">Type:</label>
                             <div class="col-lg-9">
-                              <input class="form-control" type="text" name="type[]" required>
+                              <input class="form-control" type="text" name="type[]" value="<%= field.type %>" required>
                             </div>
                           </div>
-                          <br>
-                        </div>
-                        <div class="col-xl-6">
-                          <div class="student-submit">
-                            <button type="button" id="add-field" class="btn btn-primary">Add Field</button>
-                          </div>
-                          <br>
+                          <!-- ... other fields ... -->
                         </div>
                       </div>
-                      <div id="form-fields" class="row"></div>
-                      <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    <% }) %>
+                  
+                    <!-- ... other form fields ... -->
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Update Schema</button>
                       </div>
-                    </form>
+                  </form>
+  
                   </div>
                 </div>
               </div>

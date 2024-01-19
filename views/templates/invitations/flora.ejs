@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Florya Weddings | Wedding & Event Planner</title>
+    <link rel="shortcut icon" href="/public/assets/invitations/img/favicon.png">
+    <link rel="stylesheet" href="../../../css2?family=Didact+Gothic&family=Playfair+Display:ital@0;1&display=swap">
+    <link rel="stylesheet" href="/public/assets/invitations/css/plugins.css">
+    <link rel="stylesheet" href="/public/assets/invitations/css/style.css">
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader-bg"></div>
+    <div id="preloader">
+        <div id="preloader-status">
+            <div class="preloader-position loader"> <span></span> </div>
+        </div>
+    </div>
+    <!-- Progress scroll totop -->
+    <div class="progress-wrap cursor-pointer">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewbox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
+        </svg>
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Logo -->
+            <div class="logo-wrapper">
+                <a class="logo" href="index.html"> <img src="/public/assets/landing/img/eCardifyLogo(D).png"
+                        class="logo-img" alt=""> </a>
+                <!-- <a class="logo" href="index.html"> <h2>ArchSan <span>Architecture</span></h2> </a> -->
+            </div>
+            <!-- Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span
+                    class="navbar-toggler-icon"><i class="ti-menu"></i></span> </button>
+            <!-- Menu -->
+            <!-- <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown"> <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Home <i class="ti-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="index.html" class="dropdown-item active"><span>Home Layout 1</span></a></li>
+                            <li><a href="index2.html" class="dropdown-item"><span>Home Layout 2</span></a></li>
+                            <li><a href="index3.html" class="dropdown-item"><span>Home Layout 3</span></a></li>
+                            <li><a href="index4.html" class="dropdown-item"><span>Home Layout 4</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Portfolio <i class="ti-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="portfolio-grid.html" class="dropdown-item"><span>Portfolio Grid</span></a></li>
+                            <li><a href="portfolio-masonry.html" class="dropdown-item"><span>Portfolio Masonry</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Blog <i class="ti-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="blog-2-column.html" class="dropdown-item"><span>Blog 2 Column</span></a></li>
+                            <li><a href="blog-right-sidebar.html" class="dropdown-item"><span>Blog Right Sidebar</span></a></li>
+                            <li><a href="blog-left-sidebar.html" class="dropdown-item"><span>Blog Left Sidebar</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Pages <i class="ti-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="services-page.html" class="dropdown-item"><span>Services Details</span></a></li>
+                            <li><a href="portfolio-page.html" class="dropdown-item"><span>Portfolio Page</span></a></li>
+                            <li><a href="post.html" class="dropdown-item"><span>Post Single</span></a></li>
+                            <li class="dropdown-submenu dropdown"> <a class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" href="#"><span>Other Pages <i class="ti-angle-right"></i></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="coming-soon.html" class="dropdown-item"><span>Coming Soon</span></a></li>
+                                    <li><a href="404.html" class="dropdown-item"><span>404 Error</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+            </div> -->
+        </div>
+    </nav>
+    <!-- Slider -->
+    <header class="header slider-fade">
+        <div class="owl-carousel owl-theme">
+            <% sliders.sliderOne.forEach((slide)=> { %>
+                <div class="item bg-img" data-overlay-dark="2" data-background="<%= slide.image %>">
+                    <div class="v-middle caption">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 slider-text js-fullheight">
+                                    <div class="slider-text-inner">
+                                        <div class="desc">
+                                            <h4 style="<%= getInlineStylesForText(slide.style) %>">
+                                                <%= slide.text %>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+                    <% sliders.sliderTwo.forEach((slide)=> { %>
+                        <div class="item bg-img" data-overlay-dark="2" data-background="<%= slide.image %>">
+                            <div class="v-middle caption">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6 slider-text js-fullheight">
+                                            <div class="slider-text-inner">
+                                                <div class="desc">
+                                                    <h4 style="<%= getInlineStylesForText(slide.style) %>">
+                                                        <%= slide.text %>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% sliders.sliderThree.forEach((slide)=> { %>
+                                <div class="item bg-img" data-overlay-dark="2" data-background="<%= slide.image %>">
+                                    <div class="v-middle caption">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-6 slider-text js-fullheight">
+                                                    <div class="slider-text-inner">
+                                                        <div class="desc">
+                                                            <h4 style="<%= getInlineStylesForText(slide.style) %>""><%= slide.text %></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+
+        </div>
+    </header>
+    
+
+
+    <!-- About Florya Weddings -->
+
+    <section class=" about section-padding bg-green">
+                                                                <div class="container">
+                                                                    <div class="row">
+                                                                        <div class="col-md-5 animate-box"
+                                                                            data-animate-effect="fadeInUp">
+                                                                            <div class="section-subtitle white"></div>
+                                                                            <div class="section-title white"> <span
+                                                                                    class="white"></span></div>
+                                                                            <p>
+                                                                                <%= message.Heading.text %>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-md-6 offset-md-1 mt-30 animate-box"
+                                                                            data-animate-effect="fadeInUp">
+                                                                            <p>
+                                                                                <%= message.SubHeading.text %>
+                                                                            </p>
+                                                                            <div class="butn-light mt-15"> <a
+                                                                                    href="about.html"><span>Find out
+                                                                                        more</span></a> </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                </section>
+
+
+
+
+
+
+                                                                <!-- Services -->
+                                                                <section class="services section-padding">
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col-md-5 mb-30">
+                                                                                <div class="section-subtitle">The
+                                                                                    experience</div>
+                                                                                <div class="section-title">Explore
+                                                                                    <span>Services</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-7 mb-30">
+                                                                                <p>Professional Wedding & Event Planner
+                                                                                    surabit aliquet orci elit gene
+                                                                                    tristisue in lorem dream vitae
+                                                                                    alisuam tincidunt felis sed gravida
+                                                                                    aliquam nemue libero hendrerit magna
+                                                                                    sit amenta the mollis lacus huam
+                                                                                    maurisine alisuam erat volutfat.</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="owl-carousel owl-theme">
+                                                                                    <div class="item">
+                                                                                        <div
+                                                                                            class="position-re o-hidden">
+                                                                                            <img src="<%= sliders.sliderOne[0].image %>"
+                                                                                                alt="">
+                                                                                        </div>
+                                                                                        <div class="con">
+                                                                                            <h5><a
+                                                                                                    href="services-page.html"><span></span></a>
+                                                                                            </h5>
+
+                                                                                            <div class="row facilities">
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div
+                                                                                            class="position-re o-hidden">
+                                                                                            <img src="<%= sliders.sliderOne[1].image %>"
+                                                                                                alt="">
+                                                                                        </div>
+                                                                                        <div class="con">
+                                                                                            <h5><a
+                                                                                                    href="services-page.html">
+                                                                                                    <span></span></a>
+                                                                                            </h5>
+
+                                                                                            <div class="row facilities">
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div
+                                                                                            class="position-re o-hidden">
+                                                                                            <img src="<%= sliders.sliderTwo[0].image %>"
+                                                                                                alt="">
+                                                                                        </div>
+                                                                                        <div class="con">
+                                                                                            <h5><a
+                                                                                                    href="services-page.html"><span></span></a>
+                                                                                            </h5>
+
+                                                                                            <div class="row facilities">
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div
+                                                                                            class="position-re o-hidden">
+                                                                                            <img src="<%= sliders.sliderTwo[1].image %>"
+                                                                                                alt="">
+                                                                                        </div>
+                                                                                        <div class="con">
+                                                                                            <h5><a
+                                                                                                    href=""><span></span></a>
+                                                                                            </h5>
+
+                                                                                            <div class="row facilities">
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div
+                                                                                            class="position-re o-hidden">
+                                                                                            <img src="<%= sliders.sliderThree[0].image %>"
+                                                                                                alt="">
+                                                                                        </div>
+                                                                                        <div class="con">
+                                                                                            <h5><a
+                                                                                                    href="services-page.html"><span></span></a>
+                                                                                            </h5>
+
+                                                                                            <div class="row facilities">
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="item">
+                                                                                        <div
+                                                                                            class="position-re o-hidden">
+                                                                                            <img src="<%= sliders.sliderThree[1].image %>"
+                                                                                                alt="">
+                                                                                        </div>
+                                                                                        <div class="con">
+                                                                                            <h5><a
+                                                                                                    href=""><span></span></a>
+                                                                                            </h5>
+
+                                                                                            <div class="row facilities">
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+                                                                <!-- Testiominals -->
+                                                                <section class="testimonials">
+                                                                    <div class="background bg-img bg-fixed section-padding pb-0"
+                                                                        data-background="" data-overlay-dark="5">
+                                                                        <div class="container">
+                                                                            <div class="row">
+                                                                                <div
+                                                                                    class="col-md-8 offset-md-2 text-center">
+                                                                                    <div class="testimonials-box">
+                                                                                        <div
+                                                                                            class="owl-carousel owl-theme">
+                                                                                            
+                                                                                                <iframe
+    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7647.802427552737!2d<%= location.long %>!3d<%= location.lat %>!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1705594118193!5m2!1sen!2sin"
+    width="600"
+    height="450"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+
+                                                                                                <div class="info">
+                                                                                                    <div class="cont">
+                                                                                                        <h6>Emily &
+                                                                                                            Enrico
+                                                                                                            <i>|</i>
+                                                                                                            <span><a
+                                                                                                                    href="portfolio-page.html">View
+                                                                                                                    the
+                                                                                                                    wedding</a></span>
+                                                                                                        </h6>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        
+
+                                                                                                <div class="info">
+                                                                                                    <div class="cont">
+                                                                                                        <h6>Cynthia &
+                                                                                                            Carl
+                                                                                                            <i>|</i>
+                                                                                                            <span><a
+                                                                                                                    href="portfolio-page.html">View
+                                                                                                                    the
+                                                                                                                    wedding</a></span>
+                                                                                                        </h6>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                          
+
+                                                                                                <div class="info">
+                                                                                                    <div class="cont">
+                                                                                                        <h6>Lauren &
+                                                                                                            Wayne
+                                                                                                            <i>|</i>
+                                                                                                            <span><a
+                                                                                                                    href="portfolio-page.html">View
+                                                                                                                    the
+                                                                                                                    wedding</a></span>
+                                                                                                        </h6>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+                                                                <!-- About Us -->
+                                                                <!-- <section class="about2 cover section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-30 animate-box" data-animate-effect="fadeInUp">
+                    <div class="section-subtitle">About Us</div>
+                    <div class="section-title">Florya <span>Weddings</span></div>
+                    <p>You can choose any country with good tourism wedding elementum sesue the aucan vestibulum aliquam justo in sapien rutrum volutpat. Donec in quis the pellentesque velit florya id velit ac arcu posuere blane.</p>
+                    <p>Wedding nissuam nestibulum ac quam nec odio elementum ceisue the miss varius natoque penatibus et magnis dis parturient monte.</p>
+                    <ul class="list-unstyled about-list mb-30">
+                        <li>
+                            <div class="about-list-icon"> <span class="ti-check"></span> </div>
+                            <div class="about-list-text">
+                                <p>20 Years of Experience</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="about-list-icon"> <span class="ti-check"></span> </div>
+                            <div class="about-list-text">
+                                <p>250+ Wedding Planner</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <hr class="border">
+                    <div class="about-bottom"> <img src="/public/assets/invitations/img/signature-dark.svg" alt="" class="image about-signature">
+                        <div class="about-name-wrapper">
+                            <div class="about-name">Samantha Megan</div>
+                            <div class="about-rol">Wedding Planner</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 offset-md-1 animate-box" data-animate-effect="fadeInUp">
+                    <div class="img-exp">
+                        <div class="about-img">
+                            <div class="img"> <img src="/public/assets/invitations/img/about.jpg" class="img-fluid" alt=""> </div>
+                        </div>
+                        <div id="circle">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="300px" height="300px" viewbox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
+                                <defs>
+                                    <path id="circlePath" d=" M 150, 150 m -60, 0 a 60,60 0 0,1 120,0 a 60,60 0 0,1 -120,0 "></path>
+                                </defs>
+                                <circle cx="150" cy="100" r="75" fill="none"></circle>
+                                <g>
+                                    <use xlink:href="#circlePath" fill="none"></use>
+                                    <text fill="#575c57">
+                                        <textpath xlink:href="#circlePath"> . florya weddings . planner </textpath>
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+                                                                <!-- Wedding Dates -->
+
+                                                                <section class="section-padding bg-green">
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col-md-5">
+                                                                                <div class="section-subtitle white">
+                                                                                    Dateline</div>
+                                                                                <div class="section-title white">Contact
+                                                                                    <span class="white">Us</span>
+                                                                                </div>
+                                                                                <p class="white">Your at-a-glance guide
+                                                                                    to where I stand on all the truly
+                                                                                    important things. Wedding elit miss
+                                                                                    the eget the solin miss citudino
+                                                                                    selus rutrum in miss vestibulum
+                                                                                    eleifen ornare torto.</p>
+                                                                                <div class="butn-light mt-15 mb-30"> <a
+                                                                                        href="contact.html"><span>Get in
+                                                                                            touch</span></a> </div>
+                                                                            </div>
+                                                                            <div class="col-md-6 offset-md-1">
+                                                                                <table class="wedding-date-table">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <h6>Phone</h6>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <p>
+                                                                                                    <%= contact.phone%>
+                                                                                                </p>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <h6>Mail <br></h6>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <p>
+                                                                                                    <%= contact.email %>
+                                                                                                </p>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <h6>Website </h6>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <a
+                                                                                                    href="<%= contact.website %>">
+                                                                                                    <p>
+                                                                                                        <%= contact.website
+                                                                                                            %>
+                                                                                                    </p>
+                                                                                                </a>
+                                                                                            </td>
+                                                                                        </tr>
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+                                                                <!-- Portfolio -->
+                                                                <section class="portfolio section-padding">
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12 mb-30">
+                                                                                <div class="section-subtitle">Works
+                                                                                </div>
+                                                                                <div class="section-title">Our
+                                                                                    <span>Portfolio</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="owl-carousel owl-theme">
+                                                                                    <div class="square-flip">
+                                                                                        <div class="square bg-img"
+                                                                                            data-background="<%= sliders.sliderOne[0].image %>">
+                                                                                            <div
+                                                                                                class="square-container d-flex align-items-end justify-content-end">
+                                                                                                <div class="box-title">
+                                                                                                    <h4></h4>
+                                                                                                    <h6>
+                                                                                                    </h6>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flip-overlay">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="square2 bg-green">
+                                                                                            <div
+                                                                                                class="square-container2">
+                                                                                                <h4>Cynthia & Carl</h4>
+                                                                                                <p>Lorem nissuam
+                                                                                                    nestibulum duru quam
+                                                                                                    the odion elementum
+                                                                                                    ceisue the misse
+                                                                                                    varie natoque
+                                                                                                    enatibus et dis
+                                                                                                    monte.</p>
+                                                                                                <div
+                                                                                                    class="row portfolio-list mb-30">
+                                                                                                    <div
+                                                                                                        class="col-md-12">
+                                                                                                        <ul>
+                                                                                                            <li>Wedding
+                                                                                                                Planner
+                                                                                                                : Rachel
+                                                                                                                Starletta
+                                                                                                            </li>
+                                                                                                            <li>Photographer
+                                                                                                                : Janet
+                                                                                                                Lewis
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="btn-line"><a
+                                                                                                        href="portfolio-page.html">Find
+                                                                                                        out more</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="square-flip">
+                                                                                        <div class="square bg-img"
+                                                                                            data-background="<%= sliders.sliderOne[1].image %>">
+                                                                                            <div
+                                                                                                class="square-container d-flex align-items-end justify-content-end">
+                                                                                                <div class="box-title">
+                                                                                                    <h4></h4>
+                                                                                                    <h6>
+                                                                                                        </h6>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flip-overlay">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="square2 bg-green">
+                                                                                            <div
+                                                                                                class="square-container2">
+                                                                                                <h4>Lauren & Wayne</h4>
+                                                                                                <p>Lorem nissuam
+                                                                                                    nestibulum duru quam
+                                                                                                    the odion elementum
+                                                                                                    ceisue the misse
+                                                                                                    varie natoque
+                                                                                                    enatibus et dis
+                                                                                                    monte.</p>
+                                                                                                <div
+                                                                                                    class="row portfolio-list mb-30">
+                                                                                                    <div
+                                                                                                        class="col-md-12">
+                                                                                                        <ul>
+                                                                                                            <li>Wedding
+                                                                                                                Planner
+                                                                                                                : Rachel
+                                                                                                                Starletta
+                                                                                                            </li>
+                                                                                                            <li>Photographer
+                                                                                                                : Janet
+                                                                                                                Lewis
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="btn-line"><a
+                                                                                                        href="portfolio-page.html">Find
+                                                                                                        out more</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="square-flip">
+                                                                                        <div class="square bg-img"
+                                                                                            data-background="<%= sliders.sliderTwo[0].image %>">
+                                                                                            <div
+                                                                                                class="square-container d-flex align-items-end justify-content-end">
+                                                                                                <div class="box-title">
+                                                                                                    <h4></h4>
+                                                                                                    <h6>
+                                                                                                        </h6>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flip-overlay">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="square2 bg-green">
+                                                                                            <div
+                                                                                                class="square-container2">
+                                                                                                <h4>Heather & Henry</h4>
+                                                                                                <p>Lorem nissuam
+                                                                                                    nestibulum duru quam
+                                                                                                    the odion elementum
+                                                                                                    ceisue the misse
+                                                                                                    varie natoque
+                                                                                                    enatibus et dis
+                                                                                                    monte.</p>
+                                                                                                <div
+                                                                                                    class="row portfolio-list mb-30">
+                                                                                                    <div
+                                                                                                        class="col-md-12">
+                                                                                                        <ul>
+                                                                                                            <li>Wedding
+                                                                                                                Planner
+                                                                                                                : Rachel
+                                                                                                                Starletta
+                                                                                                            </li>
+                                                                                                            <li>Photographer
+                                                                                                                : Janet
+                                                                                                                Lewis
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="btn-line"><a
+                                                                                                        href="portfolio-page.html">Find
+                                                                                                        out more</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="square-flip">
+                                                                                        <div class="square bg-img"
+                                                                                            data-background="<%= sliders.sliderTwo[1].image %>">
+                                                                                            <div
+                                                                                                class="square-container d-flex align-items-end justify-content-end">
+                                                                                                <div class="box-title">
+                                                                                                    <h4>E & M</h4>
+                                                                                                    <h6>Gold Park CA,
+                                                                                                        USA</h6>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flip-overlay">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="square2 bg-green">
+                                                                                            <div
+                                                                                                class="square-container2">
+                                                                                                <h4>l</h4>
+                                                                                               
+                                                                                                <div
+                                                                                                    class="row portfolio-list mb-30">
+                                                                                                    <div
+                                                                                                        class="col-md-12">
+                                                                                                        <ul>
+                                                                                                           
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="btn-line"><a
+                                                                                                        href="portfolio-page.html">Find
+                                                                                                        out more</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="square-flip">
+                                                                                        <div class="square bg-img"
+                                                                                            data-background="<%= sliders.sliderThree[0].image %>">
+                                                                                            <div
+                                                                                                class="square-container d-flex align-items-end justify-content-end">
+                                                                                                <div class="box-title">
+                                                                                                    <h4>S & R</h4>
+                                                                                                    <h6>Silver Park,
+                                                                                                        Oxfordshire</h6>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flip-overlay">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="square2 bg-green">
+                                                                                            <div
+                                                                                                class="square-container2">
+                                                                                                <h4>Sophia & Robert</h4>
+                                                                                                <p>Lorem nissuam
+                                                                                                    nestibulum duru quam
+                                                                                                    the odion elementum
+                                                                                                    ceisue the misse
+                                                                                                    varie natoque
+                                                                                                    enatibus et dis
+                                                                                                    monte.</p>
+                                                                                                <div
+                                                                                                    class="row portfolio-list mb-30">
+                                                                                                    <div
+                                                                                                        class="col-md-12">
+                                                                                                        <ul>
+                                                                                                            <li>Wedding
+                                                                                                                Planner
+                                                                                                                : Rachel
+                                                                                                                Starletta
+                                                                                                            </li>
+                                                                                                            <li>Photographer
+                                                                                                                : Janet
+                                                                                                                Lewis
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="btn-line"><a
+                                                                                                        href="portfolio-page.html">Find
+                                                                                                        out more</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="square-flip">
+                                                                                        <div class="square bg-img"
+                                                                                            data-background="<%= sliders.sliderThree[1].image %>">
+                                                                                            <div
+                                                                                                class="square-container d-flex align-items-end justify-content-end">
+                                                                                                <div class="box-title">
+                                                                                                    <h4>O & J</h4>
+                                                                                                    <h6>Blue House,
+                                                                                                        London</h6>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="flip-overlay">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="square2 bg-green">
+                                                                                            <div
+                                                                                                class="square-container2">
+                                                                                                <h4>Olivia & John</h4>
+                                                                                                <p>Lorem nissuam
+                                                                                                    nestibulum duru quam
+                                                                                                    the odion elementum
+                                                                                                    ceisue the misse
+                                                                                                    varie natoque
+                                                                                                    enatibus et dis
+                                                                                                    monte.</p>
+                                                                                                <div
+                                                                                                    class="row portfolio-list mb-30">
+                                                                                                    <div
+                                                                                                        class="col-md-12">
+                                                                                                        <ul>
+                                                                                                            <li>Wedding
+                                                                                                                Planner
+                                                                                                                : Rachel
+                                                                                                                Starletta
+                                                                                                            </li>
+                                                                                                            <li>Photographer
+                                                                                                                : Janet
+                                                                                                                Lewis
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="btn-line"><a
+                                                                                                        href="portfolio-page.html">Find
+                                                                                                        out more</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+                                                                <!-- Promo Video -->
+                                                                <section
+                                                                    class="video-wrapper video section-padding bg-img bg-fixed"
+                                                                    data-overlay-dark="4"
+                                                                    data-background="img/slider/15.jpg">
+                                                                    <div class="container">
+
+                                                                        <!--Add a footer image -->
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="video-box">
+                                                                                    <img src="<%= footer.image %>"
+                                                                                        alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </section>
+                                                                <!-- Pricing -->
+
+                                                                <!-- Blog -->
+
+                                                                <!-- Signup -->
+
+                                                                <!-- Clients -->
+
+                                                                <!-- Footer -->
+                                                                <footer class="footer">
+
+                                                                    <div class="footer-bottom">
+                                                                        <div class="container">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div class="footer-bottom-inner">
+                                                                                        <p
+                                                                                            class="footer-bottom-copy-right">
+                                                                                            © Copyright 2023 by <a
+                                                                                                href="https://ecardify.takshalabs.in/"
+                                                                                                target="_blank">Ecardify</a>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </footer>
+                                                                <!-- jQuery -->
+                                                                <script
+                                                                    src="/public/assets/invitations/js/jquery-3.6.3.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/jquery-migrate-3.0.0.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/modernizr-2.6.2.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/imagesloaded.pkgd.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/jquery.isotope.v3.0.2.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/pace.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/popper.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/bootstrap.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/scrollIt.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/jquery.waypoints.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/owl.carousel.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/jquery.stellar.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/jquery.magnific-popup.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/YouTubePopUp.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/smooth-scroll.min.js"></script>
+                                                                <script
+                                                                    src="/public/assets/invitations/js/custom.js"></script>
+</body>
+
+</html>

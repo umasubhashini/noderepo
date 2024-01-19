@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Employee Information</title>
+    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+    <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <!-- Header -->
+        <%- include('header.ejs') -%>
+        <!-- /Header -->
+        <!-- Sidebar -->
+        <%- include('sidebar.ejs') -%>
+
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="card comman-shadow">
+                    <div class="card-body">
+                      <form action="/company" method="post">
+                        <div class="row">
+                          <div class="col-12">
+                            <h5 class="form-title student-info">Comapnies Information</h5>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Select Company</label>
+                            <div class="col-lg-9">
+                              <select class="form-control select" name="company_id" id="company_id">
+                                <% companies.forEach(company => { %>
+                                  <option value="<%= company %>"><%= company.name %></option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="form-fields" class="row"></div>
+                        <div class="text-end">
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                      </form>
+                      <div class="mt-4">
+                        <h5>Company Information Table</h5>
+                        <table class="table" id="employeeTable">
+                            <thead>
+                                <tr>
+                                  <div class="table-responsive">
+                                    <table class="table">
+                                      <thead>
+                                        <tr>
+                                          <th>S.No</th>
+                                          <th>Company Name</th>
+                                          <th>Company logo</th>
+                                          <th>CEO Email</th>
+                                          <th>Status</th>
+                                          <th></th>
+                                          <th class="text-end">Edit/Delete</th>
+                                        </tr>
+                                      </thead>
+                                      <!-- ... (other HTML code) ... -->
+                
+                                      <tbody>
+                                        <% companies.forEach((company, index)=> { %>
+                                          <tr class="company-row">
+                                            <td>
+                                              <%= index + 1 %>
+                                            </td>
+                                            <td>
+                                              <%= company.name %>
+                                            </td>
+                                            <td>
+                                              <img src="<%= company.logo %>" alt="Company Logo"
+                                                height="50" width="50">
+                                            <td>
+                                              <%= company.ceo.email %>
+                                            </td>
+                                            <td>
+                                              <%= company.status===1 ? 'Activated' : 'Deactivated' %>
+                                            </td>
+                                            <td>
+                                              <button
+                                                onclick="updateCompanyStatus('<%= company._id %>', this.getAttribute('data-action'))"
+                                                data-action='<%= company.status === 1 ? "deactivate" : "activate" %>'
+                                                class="btn btn-primary">
+                                                <%= company.status===1 ? 'Deactivate' : 'Activate' %>
+                                              </button>
+                
+                                            </td>
+
+                                            <td class="text-end">
+                                              <div class="actions">
+                                                <a href="/edit-company/<%= company._id %>" class="btn btn-sm btn-warning">
+                                                  <i class="feather-edit"></i>
+                                                </a>
+                                                <a href="/delete-company/<%= company._id %>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this company?')">
+                                                  <i class="feather-trash-2"></i>
+                                                </a>
+                                              </div>
+                                            </td>
+                                            
+                                          </tr>
+                                          <% }); %>
+                                      </tbody>
+                
+                                      <!-- ... (other HTML code) ... -->
+                
+                                    </table>
+                                  </div>  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data rows will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </body>
+
+    <script>
+        // Function to dynamically update the table based on selected company
+        function updateTableFields(fields) {
+            const tableHeaders = document.getElementById('employeeTable').getElementsByTagName('thead')[0].getElementsByTagName('tr')[0];
+            const tableBody = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
+    
+            // Clear existing headers and data
+            tableHeaders.innerHTML = '';
+            tableBody.innerHTML = '';
+    
+            // Add headers to the table
+            fields.forEach(field => {
+                const th = document.createElement('th');
+                th.textContent = field.name;
+                tableHeaders.appendChild(th);
+            });
+        }
+    
+        // Event listener for the dropdown change
+        document.getElementById('company_id').addEventListener('change', function () {
+            const selectedCompanyId = this.value;
+    
+            // Make an API call to fetch the fields based on the selected company
+            fetch(`/api/getFields?company_id=${selectedCompanyId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Call the function to update the table with the fetched fields
+                    updateTableFields(data.fields);
+                })
+                .catch(error => {
+                    console.error('Error fetching fields:', error);
+                });
+        });
+    </script>
+</html>
+    </div>
+
+    
+	<script>
+		function updateCompanyStatus(companyId, action) {
+			// Send a request to the server to update the company status
+			fetch(`/update-company-status/${companyId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ action }),
+			})
+				.then(response => response.json())
+				.then(data => {
+					// Handle the response, maybe update the UI if needed
+					console.log(data);
+
+					// Assuming you want to refresh the page after updating the status
+					window.location.reload();
+				})
+				.catch(error => console.error(error));
+		}
+	</script>
+    <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/admin/js/feather.min.js"></script>
+    <script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+    <script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+    <script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/public/assets/admin/js/script.js"></script>
+</body>
+</html>
