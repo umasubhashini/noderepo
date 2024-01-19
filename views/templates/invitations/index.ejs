@@ -1,418 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width= , initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <title>Invitation</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700;800;900&display=swap");
 
-      body {
-        font-family: "Inter", sans-serif;
-        scroll-behavior: auto;
-        background-color: #fff;
-      }
-      h1 {
-        font-weight: 700;
-      }
-      .alert {
-        background-color:  <%= data[0].theme.primary %>;
-        color: #fff;
-        border-radius: 0 !important;
-        text-align: center;
-      }
-      .close {
-        font-weight: 500;
-        color: #fff !important;
-      }
-      .event {
-        color:  <%= data[0].theme.primary %>;
-        text-align: center;
-        border-bottom: 1px solid #eee;
-      }
-      .message {
-        /* margin: 0px; */
-        padding: 50px;
-        background-color: rgba(255, 136, 68, 0.15);
-        backdrop-filter: blur(20px);
-      }
-      h2 {
-        font-weight: 700;
-        text-align: center;
-        color: #333;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width= , initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-      .slider2 {
-        width: 100%;
-        height: 40%;
-      }
-      .carousel-inner img,
-      iframe {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        aspect-ratio: 16 / 9;
-      }
-      .carousel-indicators li {
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 1px;
-        border: 1px solid #eee;
-      }
-      .carousel-indicators .active {
-        background-color:  <%= data[0].theme.primary %>;
-      }
-      .carousel-control-prev-icon,
-      .carousel-control-next-icon {
-        font-weight: 400;
-      }
+  <title>Invitation</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700;800;900&display=swap");
 
-      .wishes .carousel {
-        width: 100%;
-        height: 80%;
-        aspect-ratio: 16 / 9;
-      }
-      .wishes .carousel-inner img {
-        width: 100%;
-        height: 60%;
-        object-fit: contain;
-      }
-      .wishes .carousel-caption {
-        /* background:rgba(253, 124, 49, 0.15); */
-        background: rgba(36, 36, 36, 0.4);
-        backdrop-filter: blur(10px);
-        width: auto;
-        margin-bottom: 15px;
-        border-radius: 10px;
-        border: 0.5px solid #eeeeee56;
-      }
-      .wishes .carousel-indicators li {
-        /* background-color: #fff; */
-        border-radius: 50%;
-        padding: 0px;
-        border: 0.2px solid #eee;
-        width: 8px;
-        height: 8px;
-      }
-      .card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        border: none;
-      }
-      .icon-container {
-        width: 100px;
-        height: 100px;
-        background-color: rgba(255, 136, 68, 0.15);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        margin: 0 auto 20px;
-        cursor: pointer;
-      }
 
-      .icon {
-        color:  <%= data[0].theme.primary %>;
-        padding: 20px !important;
-      }
-      .title {
-        text-transform: uppercase;
-        font-weight: 700;
-        border-bottom: 1px solid #b7b6b6;
-        color:  <%= data[0].theme.primary %>;
-      }
-      .matter {
-        color: #606060;
-      }
-      .photo-text {
-        position: relative;
-      }
 
-      .image-container {
-        position: relative;
-        display: inline-block;
-      }
+    body {
+      font-family: "Inter", sans-serif;
+      scroll-behavior: auto;
+      background-color: #fff;
+    }
 
-      img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-      }
+    h1 {
+      font-weight: 700;
+    }
 
-      .gradient-mask {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          to left,
+    .map-container {
+      width: 100%;
+      height: 400px;
+      /* Adjust the height as needed */
+      position: relative;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .alert {
+      background-color: <%=result.theme.primary %>;
+      color: #fff;
+      border-radius: 0 !important;
+      text-align: center;
+    }
+
+    .close {
+      font-weight: 500;
+      color: #fff !important;
+    }
+
+    .event {
+      color: <%=result.theme.primary %>;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .message {
+      /* margin: 0px; */
+      padding: 50px;
+      background-color: rgba(255, 136, 68, 0.15);
+      backdrop-filter: blur(20px);
+    }
+
+    h2 {
+      font-weight: 700;
+      text-align: center;
+      color: #333;
+    }
+
+    .slider2 {
+      width: 100%;
+      height: 40%;
+    }
+
+    .carousel-inner img,
+    iframe {
+      width: 100%;
+      height: 90%;
+      object-fit: cover;
+
+    }
+
+    .carousel-indicators li {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 1px;
+      border: 1px solid #eee;
+    }
+
+    .carousel-indicators .active {
+      background-color: <%=result.theme.primary %>;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      font-weight: 400;
+    }
+
+    .wishes .carousel {
+      width: 100%;
+      height: 80%;
+      aspect-ratio: 16 / 9;
+    }
+
+    .wishes .carousel-inner img {
+      width: 100%;
+      height: 60%;
+      object-fit: contain;
+    }
+
+    .wishes .carousel-caption {
+      /* background:rgba(253, 124, 49, 0.15); */
+      background: rgba(36, 36, 36, 0.4);
+      backdrop-filter: blur(10px);
+      width: auto;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 0.5px solid #eeeeee56;
+    }
+
+    .wishes .carousel-indicators li {
+      /* background-color: #fff; */
+      border-radius: 50%;
+      padding: 0px;
+      border: 0.2px solid #eee;
+      width: 8px;
+      height: 8px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border: none;
+    }
+
+    .icon-container {
+      width: 100px;
+      height: 100px;
+      background-color: rgba(255, 136, 68, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      cursor: pointer;
+    }
+
+    .icon {
+      color: <%=result.theme.primary %>;
+      padding: 20px !important;
+    }
+
+    .title {
+      text-transform: uppercase;
+      font-weight: 700;
+      border-bottom: 1px solid #b7b6b6;
+      color: <%=result.theme.primary %>;
+    }
+
+    .matter {
+      color: #606060;
+    }
+
+    .photo-text {
+      position: relative;
+    }
+
+    .image-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .gradient-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to left,
           rgba(0, 0, 0, 0.6) 50%,
-          rgba(0, 0, 0, 0)
-        );
-      }
+          rgba(0, 0, 0, 0));
+    }
 
-      .text-overlay {
-        position: absolute;
-        top: 25%;
-        left: 60%;
-        color: white;
-        z-index: 1;
-        padding: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrapper">
-      <div class="alert alert-dismissible fade show" role="alert">
-        Get your's today @<strong>eCardify</strong>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="alert"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+    .text-overlay {
+      position: absolute;
+      top: 25%;
+      left: 60%;
+      color: white;
+      z-index: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
 
-      <div class="event">
-        <p class="mt-3">
-          <%= data[0].header.title.text %>
-        </p>
-      </div>
-
-      <section class="container slider2 mb -5 pb-5">
-        <div id="demo" class="carousel slide" data-ride="carousel">
-          <ul class="carousel-indicators">
-            <li data-target="#demo" data-slide-to="0" class="active"></li>
-            <li data-target="#demo" data-slide-to="1"></li>
-            <li data-target="#demo" data-slide-to="2"></li>
-          </ul>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <!-- <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWcOhU4Ej0qKpZrjffn3KwbyD9quINYnlCrw&usqp=CAU"
-              /> -->
-
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/embed/bAg0BJXxX6U?si=E9Ub2OFtqDnfZWa6"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-
-              <div class="carousel-caption">
-                <h3>Los Angeles</h3>
-                <p>We had such a great time in LA!</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img
-                src="https://assets.learningwithexperts.com/6136c4a6-1d3b-4905-b7f8-715d7e2bad35"
-              />
-              <div class="carousel-caption">
-                <h3>Chicago</h3>
-                <p>Thank you, Chicago!</p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img
-                src="https://luminous-landscape.com/wp-content/uploads/2015/06/Storm-Light-Grand-Tetons-810x500.jpg"
-              />
-              <div class="carousel-caption">
-                <h3>New York</h3>
-                <p>We love the Big Apple!</p>
-              </div>
-            </div>
-          </div>
-          <a class="carousel-control-prev" href="#demo" data-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </a>
-          <a class="carousel-control-next" href="#demo" data-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </a>
-        </div>
-      </section>
-
-      <section class="contianer">
-        <div class="message">
-          <h2>Message Heading</h2>
-          <br />
-          <p class="container" style="padding: 0px 20px">
-            Happy birthday!” “Sending you smiles for every moment of your
-            special day…Have a wonderful time and a very happy birthday!” “Hope
-            your special day brings you all that your heart desires! Here's
-            wishing you a day full of pleasant surprises! Happy birthday!”
-          </p>
-        </div>
-      </section>
-
-      <section class="container my-5 wishes">
-        <div class="row" style="display: flex; align-items: center">
-          <div class="col-lg-9 sliders" style="border-right: 1px solid #eaeaea">
-            <div id="demo2" class="carousel slide" data-ride="carousel">
-              <ul class="carousel-indicators">
-                <li data-target="#demo2" data-slide-to="0" class="active"></li>
-                <li data-target="#demo2" data-slide-to="1"></li>
-                <li data-target="#demo2" data-slide-to="2"></li>
-              </ul>
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img
-                    src="https://luminous-landscape.com/wp-content/uploads/2015/06/Storm-Light-Grand-Tetons-810x500.jpg"
-                  />
-
-                  <div class="carousel-caption">
-                    <h3>Wishing Text</h3>
-                    <p>Wishes from Tony Stark</p>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <img
-                    src="https://luminous-landscape.com/wp-content/uploads/2015/06/Storm-Light-Grand-Tetons-810x500.jpg"
-                  />
-                  <div class="carousel-caption">
-                    <h3>Wishes</h3>
-                    <p>Message from Robert Downey Jr.</p>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <img
-                    src="https://luminous-landscape.com/wp-content/uploads/2015/06/Storm-Light-Grand-Tetons-810x500.jpg"
-                  />
-                  <div class="carousel-caption">
-                    <h3>Blessings</h3>
-                    <p>Love from grandparents</p>
-                  </div>
-                </div>
-              </div>
-              <a class="carousel-control-prev" href="#demo2" data-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-              </a>
-              <a class="carousel-control-next" href="#demo2" data-slide="next">
-                <span class="carousel-control-next-icon"></span>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <h1 style="color:  <%= data[0].theme.primary %>; letter-spacing: 0.3px">
-              Sample Wishing Text Comes Here...!
-            </h1>
-          </div>
-        </div>
-      </section>
-
-      <section class="container py-5">
-        <h2>Maps</h2>
-        <p align="center">
-          People wishing you from different locations in the world..
-        </p>
-        <div style="width: 100%; height: 600px">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d581364.9077777626!2d81.53308424297727!3d16.505790063091148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1704436302674!5m2!1sen!2sin"
-            style="border: 0"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </section>
-
-      <section class="py-5">
-        <h2>Contact Us</h2>
-        <p align="center">
-          Write to us to show your wishes for your special person...
-        </p>
-        <div class="row mx-5 px-5">
-          <div class="col-lg-4">
-            <div class="card">
-              <p class="title">support</p>
-              <div class="icon-container">
-                <i class="fa-solid fa-headset fa-2xl icon"></i>
-              </div>
-              <p class="matter">ecardify.takshlabs.in</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="card">
-              <p class="title">Facebook</p>
-              <div class="icon-container">
-                <i class="fa-brands fa-facebook-f fa-2xl icon"></i>
-              </div>
-              <p class="matter">facebook.com/ecardify</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="card">
-              <p class="title">Email</p>
-              <div class="icon-container">
-                <i class="fa-solid fa-envelope fa-2xl icon"></i>
-              </div>
-              <p class="matter">ecardify@gmail.com</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="container photo-text mb-5">
-        <div class="image-container">
-          <div class="gradient-mask"></div>
-          <img
-            src="https://images.pexels.com/photos/462162/pexels-photo-462162.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          />
-          <div class="text-overlay">
-            <h1>This is a dummy wishing text that is being displayed on the image , with gradient mask</h1>
-          </div>
-        </div>
-      </div>
-
-      <footer style="border-top:1px solid #eee;">
-        <p align="center" class="mt-3">powered by <b>@eCardify</b></p>
-      </footer>
+<body>
+  <div class="wrapper">
+    <div class="alert alert-dismissible fade show" role="alert">
+      <strong>
+        <%= result.header.navBanner.text %>
+      </strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
-      integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+    <div class="event">
+      <p class="mt-3">
+        <%= result.header.title.text %>
+      </p>
+    </div>
+
+    <section class="container slider2 mb-5 pb-5">
+      <div id="demo" class="carousel slide" data-ride="carousel">
+        <ul class="carousel-indicators">
+          <% result.sliders.sliderOne.forEach((slider, index)=> { %>
+            <li data-target="#demo" data-slide-to="<%= index %>" <% if (index===0) { %>class="active"<% } %>></li>
+            <% }); %>
+        </ul>
+        <div class="carousel-inner">
+          <% result.sliders.sliderOne.forEach((slider, index)=> { %>
+            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+              <img src="<%= slider.image %>" alt="<%= slider.text %>">
+              <div class="carousel-caption">
+                <h3>
+                  <%= slider.text %>
+                </h3>
+              </div>
+            </div>
+            <% }); %>
+        </div>
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="contianer">
+      <div class="message">
+        <h2>
+          <%= result.message.Heading.text %>
+        </h2>
+        <br />
+        <p class="container" style="padding: 0px 20px;">
+          <%= result.message.SubHeading.text %>
+        </p>
+      </div>
+    </section>
+
+    <section class="container my-5 wishes">
+      <div class="row" style="display: flex; align-items: center">
+        <div class="col-lg-9 sliders" style="border-right: 1px solid #eaeaea">
+          <div id="demo2" class="carousel slide" data-ride="carousel">
+            <ul class="carousel-indicators">
+              <% for (let i=0; i < result.sliders.sliderTwo.length; i++) { %>
+                <li data-target="#demo2" data-slide-to="<%= i %>" <% if (i===0) { %>class="active"<% } %>></li>
+                <% } %>
+            </ul>
+            <div class="carousel-inner">
+              <% result.sliders.sliderTwo.forEach((slide, index)=> { %>
+                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                  <img src="<%= slide.image %>" />
+                  <div class="carousel-caption">
+                    <h3>
+                      <%= slide.text %>
+                    </h3>
+                  </div>
+                </div>
+                <% }); %>
+            </div>
+            <a class="carousel-control-prev" href="#demo2" data-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo2" data-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="container py-5">
+      <h2>Maps</h2>
+      <p align="center">
+        People wishing you from different locations in the world..
+      </p>
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+    </section>
+
+
+    <section class="py-5">
+      <h2>Contact Us</h2>
+      <p align="center">
+        Write to us to show your wishes for your special person...
+      </p>
+      <div class="row mx-5 px-5">
+        <div class="col-lg-4">
+          <div class="card">
+            <p class="title">Mobile Number</p>
+            <div class="icon-container">
+              <i class="fa-solid fa-phone fa-2xl icon"></i>
+            </div>
+            <p class="matter">
+              <%= result.contact.phone %>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card">
+            <p class="title">External Links</p>
+            <div class="icon-container">
+              <i class="fa-solid fa-link fa-2xl icon"></i>
+            </div>
+            <p class="matter">
+              <a href="<%= result.contact.website %>">
+                <%= result.contact.website %>
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card">
+            <p class="title">Email</p>
+            <div class="icon-container">
+              <i class="fa-solid fa-envelope fa-2xl icon"></i>
+            </div>
+            <p class="matter">
+              <%= result.contact.email %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container photo-text mb-5">
+      <div class="image-container">
+        <div class="gradient-mask"></div>
+        <img src="<%= result.footer.image %>" />
+        <div class="text-overlay">
+          <h1>
+            <%= result.footer.text %>
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <footer style="border-top:1px solid #eee;">
+      <p align="center" class="mt-3">powered by <b>@eCardify</b></p>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Replace these coordinates with your MongoDB location data
+      const latitude = parseFloat("<%= result.location.lat %>");
+      const longitude = parseFloat("<%= result.location.long %>");
+
+      // Initialize the map
+      const map = L.map('map').setView([latitude, longitude], 13);
+
+      // Add a tile layer from a map provider (OpenStreetMap in this example)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(map);
+
+      // Add a marker at the specified coordinates
+      L.marker([latitude, longitude]).addTo(map);
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"
+    integrity="sha512-cqJWQN4qWoyiKOpKa5n5oT5fDl8CZb7nvmj7xAafyG1qu0F4J2nXStaNSZV0vXuHOCvHGfP1Gl/tcd8PkviwZ3g=="
+    crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+    integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>

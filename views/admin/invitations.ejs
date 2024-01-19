@@ -1,219 +1,672 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow-y: auto; /* Enable vertical scrolling */
-    }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Preskool - Dashboard</title>
 
-    .invitation-form {
-      max-width: 600px;
-      width: 100%;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      /* height: auto; */ /* Remove fixed height for automatic height */
-      max-height: 80vh; /* Set a maximum height */
-      overflow-y: auto; /* Enable vertical scrolling for the form */
-    }
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
+    <!-- Fontfamily -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
 
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 16px;
-      box-sizing: border-box;
-    }
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
 
-    button {
-      background-color: #3498db;
-      color: #fff;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-  </style>
-  <title>Invitation Page Form</title>
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+
+    <!-- Pe7 CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+    <style>
+        /* Define @font-face for each font family and style */
+        @font-face {
+            font-family: 'Arial';
+            src: local('Arial');
+        }
+
+        @font-face {
+            font-family: 'Verdana';
+            src: local('Verdana');
+        }
+
+        @font-face {
+            font-family: 'Courier New';
+            src: local('Courier New');
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: local('Roboto');
+            font-weight: bold;
+            /* Example: bold */
+        }
+
+        @font-face {
+            font-family: 'Montserrat';
+            src: local('Montserrat');
+            font-weight: bold;
+            /* Example: bold */
+        }
+
+        @font-face {
+            font-family: 'Algerian';
+            src: local('Algerian');
+        }
+
+        @font-face {
+            font-family: 'Britannic Bold';
+            src: local('Britannic Bold');
+        }
+
+        @font-face {
+            font-family: 'Broadway';
+            src: local('Broadway');
+        }
+
+        @font-face {
+            font-family: 'Cooper Black';
+            src: local('Cooper Black');
+        }
+
+        @font-face {
+            font-family: 'Wide Latin';
+            src: local('Wide Latin');
+        }
+
+        /* Apply font families and styles to dropdown options */
+        .font-style-selectors option[value="Arial"] {
+            font-family: 'Arial';
+        }
+
+        .font-style-selectors option[value="Verdana"] {
+            font-family: 'Verdana';
+        }
+
+        .font-style-selectors option[value="Courier New"] {
+            font-family: 'Courier New';
+        }
+
+        .font-style-selectors option[value="Roboto"] {
+            font-family: 'Roboto';
+            font-weight: bold;
+            /* Example: bold */
+        }
+
+        .font-style-selectors option[value="Montserrat"] {
+            font-family: 'Montserrat';
+            font-weight: bold;
+            /* Example: bold */
+        }
+
+        .font-style-selectors option[value="Algerian"] {
+            font-family: 'Algerian';
+        }
+
+        .font-style-selectors option[value="Britannic Bold"] {
+            font-family: 'Britannic Bold';
+        }
+
+        .font-style-selectors option[value="Broadway"] {
+            font-family: 'Broadway';
+        }
+
+        .font-style-selectors option[value="Cooper Black"] {
+            font-family: 'Cooper Black';
+        }
+
+        .font-style-selectors option[value="Wide Latin"] {
+            font-family: 'Wide Latin';
+        }
+    </style>
+
 </head>
+
 <body>
-   
-  <form action="/invite-details" method="post" id="myInvitationForm" class="invitation-form" enctype="multipart/form-data">
-    <label for="headerMsgText">Header Message Text:</label>
-    <input type="text" id="headerMsgText" name="headerMsgText">
 
-    <label for="headerMsgStyle">Header Message Style:</label>
-    <select id="headerMsgStyle" name="headerMsgStyle">
-        <option value="normal">Normal</option>
-        <option value="italic">Italic</option>
-        <option value="bold">Bold</option>
-      </select>
-      <div class="dynamic-fields" id="headerSliderFields">
-        <label>Header Slider Images:</label>
-        <div class="slider-field">
-          <input type="file" name="headerSliderImage[]" placeholder="Choose Image" accept="image/*">
-          <input type="text" name="headerSliderText[]" placeholder="Text">
-          <select name="headerSliderStyle[]">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-            <option value="bold">Bold</option>
-          </select>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <div class="header">
+
+            <!-- Logo -->
+            <div class="header-left">
+                <a href="index.ejs" class="logo">
+                    <img src="/public/assets/admin/img/logo.png" alt="Logo">
+                </a>
+                <a href="index.ejs" class="logo logo-small">
+                    <img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
+                </a>
+            </div>
+            <!-- /Logo -->
+
+            <div class="menu-toggle">
+                <a href="javascript:void(0);" id="toggle_btn">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <!--<div class="top-nav-search">
+					<form>
+						<input type="text" class="form-control" placeholder="Search here">
+						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
+					</form>
+				</div>-->
+            <!-- /Search Bar -->
+
+            <!-- Mobile Menu Toggle -->
+            <a class="mobile_btn" id="mobile_btn">
+                <i class="fas fa-bars"></i>
+            </a>
+            <!-- /Mobile Menu Toggle -->
+
+            <!-- Header Right Menu -->
+            <ul class="nav user-menu">
+                <li class="nav-item dropdown language-drop me-2">
+                    <!-- <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
+							<img src="/public/assets/admin/img/icons/header-icon-01.svg" alt="">
+						</a> -->
+                    <!-- <div class="dropdown-menu">
+							<a class="dropdown-item" href="javascript:;"><i class="flag flag-lr me-2"></i>English</a>
+							<a class="dropdown-item" href="javascript:;"><i class="flag flag-bl me-2"></i>Francais</a>
+							<a class="dropdown-item" href="javascript:;"><i class="flag flag-cn me-2"></i>Turkce</a>
+						</div> -->
+                </li>
+                <!-- Notifications -->
+
+                <!-- /Notifications -->
+                <li class="nav-item zoom-screen me-2">
+                    <a href="#" class="nav-link header-nav-list">
+                        <img src="/public/assets/admin/img/icons/header-icon-04.svg" alt="">
+                    </a>
+                </li>
+
+                <!-- User Menu -->
+                <li class="nav-item dropdown has-arrow new-user-menus">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span class="user-img">
+                            <img class="rounded-circle" src="/public/assets/admin/img/profiles/avatar-01.jpg" width="31"
+                                alt="Ryan Taylor">
+                            <div class="user-text">
+                                <h6>Ryan Taylor</h6>
+                                <p class="text-muted mb-0">Administrator</p>
+                            </div>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="user-header">
+                            <div class="avatar avatar-sm">
+                                <img src="/public/assets/admin/img/profiles/avatar-01.jpg" alt="User Image"
+                                    class="avatar-img rounded-circle">
+                            </div>
+                            <div class="user-text">
+                                <h6>Ryan Taylor</h6>
+                                <p class="text-muted mb-0">Administrator</p>
+                            </div>
+                        </div>
+                        <a class="dropdown-item" href="profile.ejs">My Profile</a>
+                        <a class="dropdown-item" href="inbox.ejs">Inbox</a>
+                        <a class="dropdown-item" href="login.ejs">Logout</a>
+                    </div>
+                </li>
+                <!-- /User Menu -->
+
+            </ul>
+            <!-- /Header Right Menu -->
+
         </div>
-      </div>
-  
-      <button type="button" onclick="addSliderField()">Add Slider Image</button>
+        <!-- /Header -->
 
-      <label for="buttonText">Button Text:</label>
-    <input type="text" id="buttonText" name="buttonText">
+        <!-- Sidebar -->
+        <%- include('sidebar.ejs') %>
+            <!-- /Sidebar -->
 
-    <label for="buttonStyle">Button Style:</label>
-    <input type="text" id="buttonStyle" name="buttonStyle">
+            <!-- Page Wrapper -->
+            <div class="page-wrapper">
+                <div class="content container-fluid">
 
-    <label for="buttonRedirect">Button Redirect:</label>
-    <input type="text" id="buttonRedirect" name="buttonRedirect">
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Invitations</h3>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/invitation1">Invitation Info </a></li>
+                                    <li class="breadcrumb-item active">Invitations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
 
-    <label for="customMsgHeadText">Custom Message Head Text:</label>
-    <input type="text" id="customMsgHeadText" name="customMsgHeadText">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form action="/create-invitation" method="post" enctype="multipart/form-data">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5 class="form-title"><span>Form Basic</span></h5>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Invitation Type<span class="login-danger">*</span></label>
+                                                    <input name="invitationType" class="form-control"
+                                                        id='invitationType' type="text"
+                                                        placeholder="Enter Invitation Type" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <h5 class="form-title"><span>Header Message</span></h5>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Text <span class="login-danger">*</span></label>
+                                                    <input name="header_title" class="form-control" type="text"
+                                                        id="dynamicTextField" placeholder="Enter Message" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Text Style<span class="login-danger">*</span></label>
+                                                    <!-- Added Dropdown for Text Styles -->
+                                                    <select name="header_title_style" id="header_title_style"
+                                                        class="form-control font-style-selectors"
+                                                        onchange="applyFontStyleToTextField()">
+                                                        <option value="Arial">Arial</option>
+                                                        <option value="Verdana">Verdana</option>
+                                                        <option value="Courier New">Courier New</option>
+                                                        <option value="Roboto">Roboto (Bold)</option>
+                                                        <option value="Montserrat">Montserrat (Bold)</option>
+                                                        <option value="Algerian">Algerian</option>
+                                                        <option value="Britannic Bold">Britannic Bold</option>
+                                                        <option value="Broadway">Broadway</option>
+                                                        <option value="Cooper Black">Cooper Black</option>
+                                                        <option value="Wide Latin">Wide Latin</option>
+                                                        <!-- Add more font styles as needed -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <h5 class="form-title"><span>Banner Message</span></h5>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Text <span class="login-danger">*</span></label>
+                                                    <input name="header_banner" class="form-control" type="text"
+                                                        id="dynamicTextField0" placeholder="Enter Banner Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Text Style<span class="login-danger">*</span></label>
+                                                    <!-- Added Dropdown for Text Styles -->
+                                                    <select name="header_banner_style" id="header_banner_style"
+                                                        class="form-control font-style-selectors"
+                                                        onchange="applyFontStyle()">
+                                                        <option value="Arial">Arial</option>
+                                                        <option value="Verdana">Verdana</option>
+                                                        <option value="Courier New">Courier New</option>
+                                                        <option value="Roboto">Roboto (Bold)</option>
+                                                        <option value="Montserrat">Montserrat (Bold)</option>
+                                                        <option value="Algerian">Algerian</option>
+                                                        <option value="Britannic Bold">Britannic Bold</option>
+                                                        <option value="Broadway">Broadway</option>
+                                                        <option value="Cooper Black">Cooper Black</option>
+                                                        <option value="Wide Latin">Wide Latin</option>
+                                                        <!-- Add more font styles as needed -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-    <label for="customMsgHeadStyle">Custom Message Head Style:</label>
-    <input type="text" id="customMsgHeadStyle" name="customMsgHeadStyle">
 
-    <label for="customMsgText">Custom Message Text:</label>
-    <input type="text" id="customMsgText" name="customMsgText">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Slider One:</label>
+                                            <div class="slider-container" id="slider-one-container"></div>
+                                            <button type="button" class="btn btn-primary add-slider"
+                                                data-container="slider-one-container">Add Slider</button>
+                                        </div>
 
-    <label for="customMsgStyle">Custom Message Style:</label>
-    <input type="text" id="customMsgStyle" name="customMsgStyle">
+                                        <div class="form-group">
+                                            <label>Slider Two:</label>
+                                            <div class="slider-container" id="slider-two-container"></div>
+                                            <button type="button" class="btn btn-primary add-slider"
+                                                data-container="slider-two-container">Add Slider</button>
+                                        </div>
 
-    <label>Slider Images:</label>
-    <div class="dynamic-fields" id="sliderImgFields">
-      <div class="slider-field">
-        <input type="file" name="sliderImgImage[]" placeholder="Choose Image" accept="image/*">
-        <input type="text" name="sliderImgText[]" placeholder="Text">
-        <select name="SliderImgStyle[]">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-            <option value="bold">Bold</option>
-          </select>
-      </div>
+                                        <div class="form-group">
+                                            <label>Slider Three:</label>
+                                            <div class="slider-container" id="slider-three-container"></div>
+                                            <button type="button" class="btn btn-primary add-slider"
+                                                data-container="slider-three-container">Add Slider</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5 class="form-title"><span>Custom Message</span></h5>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label> Heading <span class="login-danger">*</span></label>
+                                                    <input name="message_heading" class="form-control" type="text"
+                                                        id="dynamicTextField1" placeholder="Enter Custom Head" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Heading Style<span class="login-danger">*</span></label>
+                                                    <!-- Added Dropdown for Text Styles -->
+                                                    <select name="message_heading_style" id="message_heading_style"
+                                                        class="form-control font-style-selectors"
+                                                        onchange="applyFontStyle()">
+                                                        <option value="Arial">Arial</option>
+                                                        <option value="Verdana">Verdana</option>
+                                                        <option value="Courier New">Courier New</option>
+                                                        <option value="Roboto">Roboto (Bold)</option>
+                                                        <option value="Montserrat">Montserrat (Bold)</option>
+                                                        <option value="Algerian">Algerian</option>
+                                                        <option value="Britannic Bold">Britannic Bold</option>
+                                                        <option value="Broadway">Broadway</option>
+                                                        <option value="Cooper Black">Cooper Black</option>
+                                                        <option value="Wide Latin">Wide Latin</option>
+                                                        <!-- Add more font styles as needed -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Sub-Heading <span class="login-danger">*</span></label>
+                                                    <input name="message_subheading" class="form-control" type="text"
+                                                        id="dynamicTextField2" placeholder="Enter Custom Text" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label>Sub-Heading Style<span class="login-danger">*</span></label>
+                                                    <!-- Added Dropdown for Text Styles -->
+                                                    <select name="message_subheading_style"
+                                                        id="message_subheading_style"
+                                                        class="form-control font-style-selectors"
+                                                        onchange="applyFontStyle()">
+                                                        <option value="Arial">Arial</option>
+                                                        <option value="Verdana">Verdana</option>
+                                                        <option value="Courier New">Courier New</option>
+                                                        <option value="Roboto">Roboto (Bold)</option>
+                                                        <option value="Montserrat">Montserrat (Bold)</option>
+                                                        <option value="Algerian">Algerian</option>
+                                                        <option value="Britannic Bold">Britannic Bold</option>
+                                                        <option value="Broadway">Broadway</option>
+                                                        <option value="Cooper Black">Cooper Black</option>
+                                                        <option value="Wide Latin">Wide Latin</option>
+                                                        <!-- Add more font styles as needed -->
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5 class="form-title"><span>Event Information</span></h5>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>User Name<span class="login-danger">*</span></label>
+                                                    <input name="username" class="form-control" type="text"
+                                                        placeholder="Enter User Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>Mobile no<span class="login-danger">*</span></label>
+                                                    <input name="contact-phones" class="form-control" type="tel"
+                                                        placeholder="Enter Mobile No" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>Email<span class="login-danger">*</span></label>
+                                                    <input name="contact-emails" class="form-control" type="email"
+                                                        placeholder="Enter Email" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>Website<span class="login-danger">*</span></label>
+                                                    <input name="contact-websites" class="form-control" type="url"
+                                                        placeholder="Enter Event Link" required>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>Address<span class="login-danger">*</span></label>
+                                                    <textarea name="eventAddress" id="eventAddress" class="form-control" rows="3" placeholder="Enter Event Address" required></textarea>
+                                                </div>
+                                            </div> -->
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>Latitude</label>
+                                                    <input name="mapslatitude" id="mapslatitude" class="form-control"
+                                                        type="text" placeholder="Latitude">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label>Longitude</label>
+                                                    <input name="mapslongitude" id="mapslongitude" class="form-control"
+                                                        type="text" placeholder="Longitude">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h5 class="form-title"><span>Slider Image</span></h5>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <!-- Existing field for Upload Image -->
+                                                <div class="form-group local-forms">
+                                                    <label>Footer-image<span class="login-danger">*</span></label>
+                                                    <input name="footer-images" class="form-control " type="file"
+                                                        accept="image/,video/" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <!-- Existing field for Image Text -->
+                                                <div class="form-group local-forms">
+                                                    <label> Text<span class="login-danger">*</span></label>
+                                                    <input name="footer-texts" class="form-control" type="text"
+                                                        id="footer-image" placeholder="Enter Image Text" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group local-forms">
+                                                    <label> Style<span class="login-danger">*</span></label>
+                                                    <select name="footer_style" id="image"
+                                                        class="form-control font-style-selectors"
+                                                        onchange="applyFontStyle()">
+                                                        <option value="Arial">Arial</option>
+                                                        <option value="Verdana">Verdana</option>
+                                                        <option value="Courier New">Courier New</option>
+                                                        <option value="Roboto">Roboto (Bold)</option>
+                                                        <option value="Montserrat">Montserrat (Bold)</option>
+                                                        <option value="Algerian">Algerian</option>
+                                                        <option value="Britannic Bold">Britannic Bold</option>
+                                                        <option value="Broadway">Broadway</option>
+                                                        <option value="Cooper Black">Cooper Black</option>
+                                                        <option value="Wide Latin">Wide Latin</option>
+                                                        <!-- Add more font styles as needed -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h5 class="form-title"><span>Theme</span></h5>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <div class="form-group local-forms">
+                                                        <label>Primary Color<span class="login-danger">*</span></label>
+                                                        <input name="theme-primary" class="form-control" type="color"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <div class="form-group local-forms">
+                                                        <label>Secondary Color<span
+                                                                class="login-danger">*</span></label>
+                                                        <input name="theme-secondary" class="form-control" type="color"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 button-container">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const addSliderBtns = document.querySelectorAll('.add-slider');
+
+                            addSliderBtns.forEach(addSliderBtn => {
+                                addSliderBtn.addEventListener('click', () => {
+                                    const containerId = addSliderBtn.getAttribute('data-container');
+                                    const slidersContainer = document.getElementById(containerId);
+                                    console.log(containerId);
+                                    const sliderContainer = document.createElement('div');
+                                    sliderContainer.className = 'form-group row';
+                                    sliderContainer.innerHTML = `
+                                    <div class="col-md-3">
+                                        <label>Image:</label>
+                                        <input type="file" class="form-control" name="${containerId}-images[]" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Style:</label>
+                                        <select class="form-control" name="${containerId}-styles[]" required>
+                                            <option value="Arial">Arial</option>
+                                                        <option value="Verdana">Verdana</option>
+                                                        <option value="Courier New">Courier New</option>
+                                                        <option value="Roboto">Roboto (Bold)</option>
+                                                        <option value="Montserrat">Montserrat (Bold)</option>
+                                                        <option value="Algerian">Algerian</option>
+                                                        <option value="Britannic Bold">Britannic Bold</option>
+                                                        <option value="Broadway">Broadway</option>
+                                                        <option value="Cooper Black">Cooper Black</option>
+                                                        <option value="Wide Latin">Wide Latin</option>
+                                            <!-- Add more styles as needed -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Text:</label>
+                                        <input type="text" class="form-control" name="${containerId}-texts[]" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Action:</label>
+                                        <input type="text" class="form-control" name="${containerId}-actions[]" required>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>&nbsp;</label>
+                                        <button type="button" class="btn btn-danger delete-slider">Delete</button>
+                                    </div>
+                                `;
+                                    slidersContainer.appendChild(sliderContainer);
+
+                                    const deleteSliderBtns = slidersContainer.querySelectorAll('.delete-slider');
+                                    deleteSliderBtns.forEach(deleteBtn => {
+                                        deleteBtn.addEventListener('click', () => {
+                                            sliderContainer.remove();
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
     </div>
-    <button type="button" onclick="addSliderImgField()">Add Slider Image</button>
 
-    <label for="mapsLongitude">Maps Longitude:</label>
-    <input type="text" id="mapsLongitude" name="mapsLongitude" value="0">
 
-    <label for="mapsLatitude">Maps Latitude:</label>
-    <input type="text" id="mapsLatitude" name="mapsLatitude" value="0">
-
-    <label>Contact Information:</label>
-    <div class="dynamic-fields" id="contactInfoFields">
-      <div class="contact-info-field">
-        <input type="text" name="contactInfoField[]" placeholder="Field">
-        <input type="text" name="contactInfoValue[]" placeholder="Value">
-        <input type="text" name="contactInfoStyle[]" placeholder="Style">
-      </div>
     </div>
-    <button type="button" onclick="addContactInfoField()">Add Contact Info</button>
 
-    <label>Extra Images:</label>
-    <div class="dynamic-fields" id="extraImgFields">
-      <div class="extra-img-field">
-        <input type="file" name="extraImg[]" placeholder="Choose Image" accept="image/*">
-      </div>
     </div>
-    <button type="button" onclick="addExtraImgField()">Add Extra Image</button>
+    </div>
+    </div>
 
-    <label for="aboutText">About Text:</label>
-    <textarea id="aboutText" name="aboutText" rows="4"></textarea>
 
-    <label for="aboutStyle">About Style:</label>
-    <input type="text" id="aboutStyle" name="aboutStyle">
 
-    <!-- Repeat similar sections for other fields -->
 
-    <button type="submit" onclick="submitForm()">Submit</button>
-  </form>
+    <!-- jQuery -->
+    <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
 
-  <script>
-     function addSliderField() {
-      const sliderFields = document.getElementById('headerSliderFields');
-      const newField = document.createElement('div');
-      newField.className = 'slider-field';
-      newField.innerHTML = `
-        <input type="file" name="headerSliderImage[]" placeholder="Choose Image" accept="image/*">
-        <input type="text" name="headerSliderText[]" placeholder="Text">
-        <select name="headerSliderStyle[]">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-            <option value="bold">Bold</option>
-          </select>
-      `;
-      sliderFields.appendChild(newField);
-    }
-    // Add dynamic fields for slider images
-    function addSliderImgField() {
-      const sliderImgFields = document.getElementById('sliderImgFields');
-      const newField = document.createElement('div');
-      newField.className = 'slider-field';
-      newField.innerHTML = `
-        <input type="file" name="sliderImgImage[]" placeholder="Choose Image" accept="image/*">
-        <input type="text" name="sliderImgText[]" placeholder="Text">
-        <select name="sliderImgStyle[]">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-            <option value="bold">Bold</option>
-          </select>
-      `;
-      sliderImgFields.appendChild(newField);
-    }
+    <!-- Bootstrap Core JS -->
+    <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    // Add dynamic fields for contact information
-    function addContactInfoField() {
-      const contactInfoFields = document.getElementById('contactInfoFields');
-      const newField = document.createElement('div');
-      newField.className = 'contact-info-field';
-      newField.innerHTML = `
-        <input type="text" name="contactInfoField[]" placeholder="Field">
-        <input type="text" name="contactInfoValue[]" placeholder="Value">
-        <input type="text" name="contactInfoStyle[]" placeholder="Style">
-      `;
-      contactInfoFields.appendChild(newField);
-    }
+    <!-- Feather Icon JS -->
+    <script src="/public/assets/admin/js/feather.min.js"></script>
 
-    // Add dynamic fields for extra images
-    function addExtraImgField() {
-      const extraImgFields = document.getElementById('extraImgFields');
-      const newField = document.createElement('div');
-      newField.className = 'extra-img-field';
-      newField.innerHTML = `
-      <input type="file" name="extraImg[]" placeholder="Choose Image" accept="image/*">
-      `;
-      extraImgFields.appendChild(newField);
-    }
+    <!-- Slimscroll JS -->
+    <script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-//     function submitForm() {
-//   const formData = new FormData(document.getElementById('myInvitationForm'));
-//   console.log('Form Data:', formData);
-//   // ... other code to submit the form
-// }
-  </script>
+    <!-- Select2 JS -->
+    <script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+
+    <!-- Datepicker Core JS -->
+    <script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+    <script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/public/assets/admin/js/script.js"></script>
 </body>
-
 
 </html>
