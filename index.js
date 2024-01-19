@@ -115,6 +115,95 @@ app.listen(8000, function () {
 //   }
 // });
 
+
+
+  // edit the company details if the comapny has already schema preview it and edit or else disply that the comapny has no schema
+
+  app.get("/edit-company/:companyId", async (req, res) => {
+    try {
+      const companyId = req.params.companyId;
+      const companySchema = await dfields.findOne({ company_id: companyId });
+  
+      if(!companySchema) {
+        return res.status(404).json({ error: 'Company not found' });
+      }
+
+      res.render("admin/edit-company-schema", { companySchema });
+
+    } catch (error) {
+      console.error('Error fetching company schema:', error);
+      
+    }
+  })
+
+// update the schema of the company 
+
+app.post("/edit-company-schema/:companyId", async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
+    const companySchema = await dfields.findOne({ company_id: companyId });
+
+    if(!companySchema) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    const updatedFields = req.body.fields;
+    const updatedTypes = req.body.type;
+
+    companySchema.fields = updatedFields.map((field, index) => ({
+      name: field,
+      type: updatedTypes[index],
+    }));
+
+    await companySchema.save();
+
+    res.redirect('/edit-company/' + companyId); // Redirect to the edit page or another suitable route
+
+  } catch (error) {
+    console.error('Error updating company schema:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+  
+
+
+
+
+
+
+// to delete the company by using the comapny id 
+
+app.get("/delete-company/:companyId", async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
+    const company = await mcompany.findByIdAndDelete(companyId);
+
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
+    // Delete the image from S3
+    const key = `company_logo/${company._id}`;
+    const s3DeleteParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    };
+
+    await s3.deleteObject(s3DeleteParams).promise();
+
+    // Fetch companies data
+    const companies = await mcompany.find(); // Assuming you have a model named Company
+
+    res.render("admin/company", { companies });
+  } catch (error) {
+    console.error("Error deleting company:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+);
+
+
 app.get("/admin", async (req, res) => {
   try {
     const admin = await adminModel.findOne({
@@ -1397,6 +1486,10 @@ app.get("/company", async (req, res) => {
   }
 });
 
+
+
+
+
 // saving the data from db to jsons and excel
 
 app.get("/download-excel", async (req, res) => {
@@ -1486,4 +1579,23 @@ app.locals.getInlineStylesForText = (style) =>
   }[style] || "");
 
 
+  // edit the company details if the comapny has already schema preview it and edit or else disply that the comapny has no schema
+
+  app.get("/edit-company/:companyId", async (req, res) => {
+    try {
+      const companyId = req.params.companyId;
+      const company = await mcompany.findById(companyId);
   
+      if (!company) {
+        return res.status(404).json({ error: "Company not found" });
+      }
+  
+      // Render the edit-company.ejs template with the company data
+      res.render("admin/edit-company-schema", { company });
+    } catch (error) {
+      console.error("Error fetching company for editing:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+  );
+
