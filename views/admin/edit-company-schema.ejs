@@ -56,17 +56,24 @@
                               <input class="form-control" type="text" name="type[]" value="<%= field.type %>" required>
                             </div>
                           </div>
-                          <!-- ... other fields ... -->
+                          <div class="text-end">
+                            <button type="button" class="btn btn-danger delete-field">Delete Field</button>
+                          </div>
+                          <br>
                         </div>
                       </div>
                     <% }) %>
                   
                     <!-- ... other form fields ... -->
+                    <div class="row" id="form-fields">
+                      <!-- New fields will be added here -->
+                    </div>
+                  
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Update Schema</button>
-                      </div>
+                      <button type="submit" class="btn btn-primary">Update Schema</button>
+                      <button type="button" id="add-field" class="btn btn-success">Add Field</button>
+                    </div>
                   </form>
-  
                   </div>
                 </div>
               </div>
@@ -79,38 +86,46 @@
           document.addEventListener('DOMContentLoaded', () => {
             const addFieldBtn = document.getElementById('add-field');
             const formFieldsContainer = document.getElementById('form-fields');
-
+        
+            const deleteField = (fieldContainer) => {
+              fieldContainer.remove();
+            };
+        
             addFieldBtn.addEventListener('click', () => {
               const fieldContainer = document.createElement('div');
               fieldContainer.className = 'row';
               fieldContainer.innerHTML = `
-            <div class="col-xl-6">
-              <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Field:</label>
-                <div class="col-lg-9">
-                  <input class="form-control" type="text" name="fields[]" required>
+                <div class="col-xl-6">
+                  <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Field:</label>
+                    <div class="col-lg-9">
+                      <input class="form-control" type="text" name="fields[]" required>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-xl-6">
-              <div class="form-group row">
-                <label class="col-lg-3 col-form-label">Type:</label>
-                <div class="col-lg-9">
-                  <input class="form-control" type="text" name="type[]" required>
+                <div class="col-xl-6">
+                  <div class="form-group row">
+                    <label class="col-lg-3 col-form-label">Type:</label>
+                    <div class="col-lg-9">
+                      <input class="form-control" type="text" name="type[]" required>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <button type="button" class="btn btn-danger delete-field">Delete Field</button>
+                  </div>
+                  <br>
                 </div>
-              </div>
-              <div class="text-end">
-                <button type="button" class="btn btn-danger delete-field">Delete Field</button>
-              </div>
-              <br>
-            </div>
-          `;
+              `;
               formFieldsContainer.appendChild(fieldContainer);
-
+        
               const deleteFieldBtn = fieldContainer.querySelector('.delete-field');
-              deleteFieldBtn.addEventListener('click', () => {
-                fieldContainer.remove();
-              });
+              deleteFieldBtn.addEventListener('click', () => deleteField(fieldContainer));
+            });
+        
+            // Add event listeners for existing fields
+            const deleteFieldButtons = document.querySelectorAll('.delete-field');
+            deleteFieldButtons.forEach((button) => {
+              button.addEventListener('click', () => deleteField(button.closest('.row')));
             });
           });
         </script>

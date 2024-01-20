@@ -19,13 +19,15 @@ const path = require("path");
 const adminModel = require("./models/admin");
 const multer = require("multer");
 const Image = require("./models/image");
-// const LogModel = require('./models/logModel');
+const LogModel = require('./models/logModel');
 const { ObjectId } = require("mongodb");
 const AWS = require("aws-sdk");
 const dotenv = require("dotenv");
 const invitations = require("./models/invitations");
 const exceljs = require("exceljs");
 const AdmZip = require('adm-zip');
+const empInfo = require("./models/employeeinfo");
+const csv = require('csvtojson');
 
 dotenv.config();
 
@@ -103,17 +105,17 @@ app.listen(8000, function () {
 // const logModel = new LogModel();
 
 // Middleware for logging route access
-app.use(async (req, res, next) => {
-  const routeAccessDetails = {
-    method: req.method,
-    path: req.path,
-    query: req.query,
-    params: req.params,
-  };
+// app.use(async (req, res, next) => {
+//   const routeAccessDetails = {
+//     method: req.method,
+//     path: req.path,
+//     query: req.query,
+//     params: req.params,
+//   };
 
-  await logModel.logEvent('route_access', routeAccessDetails);
-  next();
-});
+//   await LogModel.logEvent('route_access', routeAccessDetails);
+//   next();
+// });
 
 
 
@@ -129,11 +131,84 @@ app.use(async (req, res, next) => {
 //   }
 // });
 
+app.get("/download-schema-csv/:companyid", async (req, res) => {
+  try {
+    const companyId = req.params.companyid;
+    // Retrieve dynamic form fields based on the company ID
+    const dynamicForm = await dfields.findOne({ company_id: companyId }).populate('fields');
+
+    if (!dynamicForm) {
+      return res.status(404).send('Dynamic form not found for the specified company ID');
+    }
+
+    // Check if the 'fields' property exists in dynamicForm
+    if (!dynamicForm.fields || dynamicForm.fields.length === 0) {
+      return res.status(500).send('Fields not found in the dynamic form');
+    }
+
+    // Extract field names from the dynamic form
+    const fieldNames = dynamicForm.fields.map(field => field.name);
+
+    // Create CSV content
+    const csvContent = `${fieldNames.join(',')}\n`;
+
+    // Set response headers for CSV download
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="${companyId}_dynamic_form.csv"`);
+
+    // Write CSV content to response stream
+    res.write(csvContent);
+    res.end();
+  } catch (error) {
+    console.error('Error in API call:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/download-employee-csv/:companyId', async (req, res) =>
+ {
+  const companyId = req.params.companyId;
+  try {
+    
+    const employeeData = await empInfo.find({ company_id: companyId });
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet('Employee Data');
+
+    const headers = [];
+    const firstEmployee = employeeData[0];
+
+    if (firstEmployee) {
+      firstEmployee.employeeData.forEach(data => {
+        headers.push(data.name);
+      });
+      headers.push('photo');
+    }
+
+    worksheet.addRow(headers);
+    employeeData.forEach(employee => {
+      const rowData = [];
+      employee.employeeData.forEach(data => {
+        rowData.push(data.value);
+      });
+      rowData.push(employee.photo);
+      worksheet.addRow(rowData);
+    });
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=employee_data.xlsx');
+    res.setHeader('Cache-Control', 'no-cache');
+
+    res.status(200).send(buffer);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Error generating CSV file.');
+  }
+});
 
 
   // edit the company details if the comapny has already schema preview it and edit or else disply that the comapny has no schema
-
-  app.get("/edit-company/:companyId", async (req, res) => {
+app.get("/edit-company/:companyId", async (req, res) => {
     try {
       const companyId = req.params.companyId;
       const companySchema = await dfields.findOne({ company_id: companyId });
@@ -152,13 +227,13 @@ app.use(async (req, res, next) => {
 
 // update the schema of the company 
 
-app.post("/edit-company-schema/:companyId", async (req, res) => {
+app.post("/edit-company-schema/:Id", async (req, res) => {
   try {
-    const companyId = req.params.companyId;
-    const companySchema = await dfields.findOne({ company_id: companyId });
-
+    const companyId = req.params.Id;
+    const companySchema = await dfields.findOne({ _id: companyId });
+    
     if(!companySchema) {
-      return res.status(404).json({ error: 'Company not found' });
+      return res.status(404).json({ error: 'Company not found !!' });
     }
 
     const updatedFields = req.body.fields;
@@ -171,22 +246,13 @@ app.post("/edit-company-schema/:companyId", async (req, res) => {
 
     await companySchema.save();
 
-    res.redirect('/edit-company/' + companyId); // Redirect to the edit page or another suitable route
+    res.redirect('/company');
 
   } catch (error) {
     console.error('Error updating company schema:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-  
-
-
-
-
-
-
-// to delete the company by using the comapny id 
 
 app.get("/delete-company/:companyId", async (req, res) => {
   try {
@@ -209,7 +275,7 @@ app.get("/delete-company/:companyId", async (req, res) => {
     // Fetch companies data
     const companies = await mcompany.find(); // Assuming you have a model named Company
 
-    res.render("admin/company", { companies });
+    res.render("admin/companies-list", { companies });
   } catch (error) {
     console.error("Error deleting company:", error);
     res.status(500).send("Internal Server Error");
@@ -885,8 +951,7 @@ app.get('/cardlist', async (req, res) => {
   }
 });
 
-app.post(
-  "/businesscard/:userId",
+app.post("/businesscard/:userId",
   upload.fields([
     { name: "Image", maxCount: 1 },
     { name: "bgImage", maxCount: 1 },
@@ -1116,8 +1181,8 @@ app.post("/company-details", upload.single("logo"), async (req, res) => {
 
     });
 
-    await newCompany.save();
-    res.status(201).json({ message: 'Company added successfully', company: newCompany });
+    companies = await mcompany.find();
+    res.render('admin/companies',{companies})
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -1273,21 +1338,6 @@ app.put('/update-company-status/:companyId', async (req, res) => {
   }
 });
 
-app.get("/invitations/invite/:invitationId", async (req, res) => {
-  try {
-    const invitationId = req.params.invitationId;
-    const result = await invitations.find({
-      invitationId: invitationId,
-    });
-    if (result) {
-      res.render("templates/invitations/index", { data: result });
-    } else {
-      console.log("error");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 app.get("/employee-list", async (req, res) => {
   const employees = await emp.find();
@@ -1458,7 +1508,21 @@ app.get("/custompages", async (req, res) => {
 
 
 app.get('/create-schema', async (req, res) => {
-  const companies = await mcompany.find({});
+  const companies = await mcompany.aggregate([
+    {
+      $lookup: {
+        from: 'dynamicforms', // Replace with the actual name of your DynamicForm collection
+        localField: '_id',
+        foreignField: 'company_id',
+        as: 'dynamicForm',
+      },
+    },
+    {
+      $match: {
+        dynamicForm: { $exists: false, $eq: [] }, // Filter only companies without dynamic form records
+      },
+    },
+  ]);
   res.render('admin/create-schema', { companies });
 });
 
@@ -1645,4 +1709,110 @@ app.post('/create-invitation', upload.fields([
     res.status(500).send('Internal Server Error');
   }
 });
+
+app.get("/company", async (req, res) => {
+  try {
+    // Fetch the list of companies from your database
+    const companies = await mcompany.aggregate([
+      {
+        $lookup: {
+          from: 'dynamicforms', // Replace with the actual name of your DynamicForm collection
+          localField: '_id',
+          foreignField: 'company_id',
+          as: 'dynamicForm',
+        },
+      },
+      {
+        $match: {
+          dynamicForm: { $exists: true, $ne: [] }, // Filter only companies with dynamic form records
+        },
+      },
+    ]);
+    // Render the company.ejs template with the list of companies
+    res.render("admin/company", { companies });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
+app.post("/upload-employee-details", upload.single("csvFile"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file provided" });
+  }
+
+  try {
+    const companyId = req.body.companyId;
+
+    const jsonObj = await csv().fromString(req.file.buffer.toString());
+    const modifiedJsonObj = jsonObj.map((entry) => {
+     
+      const documentId = new ObjectId();
+
+      // Construct photo URL
+      const photoUrl = `https://ecardify.s3.ap-south-1.amazonaws.com/employee_img/${companyId}_${documentId}_profileimg`;
+
+      const { company_id, ...employeeData } = entry;
+
+      const employeeDataArray = Object.entries(employeeData).map(([name, value]) => ({ name, value }));
+
+      return { _id:documentId,company_id: companyId, photo: photoUrl, employeeData: employeeDataArray };
+    });
+
+    const data = await empInfo.insertMany(modifiedJsonObj);
+    res.redirect('/company');
+  } catch (err) {
+    // Handle errors appropriately
+    console.error(err);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: err.message,
+    });
+  }
+});
+
+
+app.post("/bulk-upload", upload.single('zipFiles'), async (req, res) => {
+  const s3 = new AWS.S3();
+  const bucketName = process.env.S3_BUCKET_NAME;
+  const s3Folder = 'employee_img/';
+  const cname = req.body.companyId;
+  console.log(req.file)
+  try {
+    // Create a temporary folder
+    const tempFolder = path.join(__dirname, 'temp');
+    if (!fs.existsSync(tempFolder)) {
+      fs.mkdirSync(tempFolder);
+    }
+
+    const zip = new AdmZip(req.file.buffer);
+    const zipEntries = zip.getEntries();
+    const files = zipEntries.filter(entry => !entry.entryName.endsWith('/'));
+    for (const file of files) {
+      console.log(file)
+      const fileBuffer = file.getData();
+      const fileName = path.basename(file.entryName);
+      const key = s3Folder + fileName+'_profileimg';
+
+      const params = {
+        Bucket: bucketName,
+        Key: key,
+        Body: fileBuffer,
+        ContentType: 'image/jpeg',
+      };
+
+      await s3.upload(params).promise();
+    }
+
+    // Remove the temporary folder
+    fs.rmdirSync(tempFolder, { recursive: true });
+    res.redirect('/company');
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Error uploading folder.');
+  }
+});
+
 
