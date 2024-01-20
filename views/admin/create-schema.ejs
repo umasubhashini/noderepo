@@ -33,6 +33,17 @@
               <div class="col-sm-12">
                 <div class="card comman-shadow">
                   <div class="card-body">
+                    <script>
+                      var companiesEmpty = <%- companies.length === 0 %>; 
+                      if (!companiesEmpty) {
+                        document.addEventListener('DOMContentLoaded', function () {
+                          document.getElementById('create-schema-form').style.display = 'block';
+                        });
+                      } else {
+                        alert('All companies have schema defined.');
+                        window.history.back(); // Go back to the previous page
+                      }
+                    </script>
                     <form action="/create-schema" method="post">
                       <div class="row">
                         <div class="col-12">
