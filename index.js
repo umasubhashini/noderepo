@@ -1340,7 +1340,27 @@ app.put('/update-company-status/:companyId', async (req, res) => {
 
 
 app.get("/employee-list", async (req, res) => {
-  const employees = await emp.find();
+  const employees = await empInfo.aggregate([
+    {
+      $lookup: {
+        from: mcompany.collection.name,
+        localField: 'company_id',
+        foreignField: '_id',
+        as: 'companyDetails'
+      }
+    },
+    {
+      $unwind: '$companyDetails'
+    },
+    {
+      $project: {
+        'companyName': '$companyDetails.name',
+        'photo': 1,
+        'employeeData': 1
+      }
+    }
+  ]);
+  console.log(employees)
   const companies = await mcompany.find();
   res.render("admin/employees-list", { employees, companies });
 });
@@ -1508,21 +1528,11 @@ app.get("/custompages", async (req, res) => {
 
 
 app.get('/create-schema', async (req, res) => {
-  const companies = await mcompany.aggregate([
-    {
-      $lookup: {
-        from: 'dynamicforms', // Replace with the actual name of your DynamicForm collection
-        localField: '_id',
-        foreignField: 'company_id',
-        as: 'dynamicForm',
-      },
-    },
-    {
-      $match: {
-        dynamicForm: { $exists: false, $eq: [] }, // Filter only companies without dynamic form records
-      },
-    },
-  ]);
+  const dynamicFormCompanies = await dfields.distinct('company_id');
+  const companies = await mcompany.find({
+    _id: { $nin: dynamicFormCompanies },
+  });
+  console.log(companies)
   res.render('admin/create-schema', { companies });
 });
 
@@ -1541,7 +1551,7 @@ app.post("/create-schema", async (req, res) => {
 
     await newDocument.save();
 
-    res.redirect("/admin/create-schema");
+    res.redirect("/company");
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error'); // Handle errors appropriately
@@ -1816,3 +1826,6 @@ app.post("/bulk-upload", upload.single('zipFiles'), async (req, res) => {
 });
 
 
+app.get("/shops",async(req,res)=>{
+  res.render('admin/shops-form');
+})
