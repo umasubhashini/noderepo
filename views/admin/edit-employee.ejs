@@ -41,94 +41,17 @@
                                         <div class="col-12 col-sm-4">
                                             <div class="form-group local-forms">
                                                 <label>Photo:</label>
-                                                <input class="form-control" type="file" id="photo" name="photo" accept="image/*" required>
+                                                <input class="form-control" type="file" id="photo" name="photo" accept="image/*">
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Name:</label>
-                                                <input class="form-control" type="text" placeholder="Enter Name" id="name" name="name" value="<%- employee.name%>" required>
-                                                
+                                        <% employee.employeeData.forEach(data => { %>
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group local-forms">
+                                                    <label><%= data.name %>:</label>
+                                                    <input class="form-control" type="text" placeholder="Enter <%= data.name %>" name="employeeData[<%= data.name %>]" value="<%= data.value %>" required>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Select Company:</label>
-                                                <select class="form-control select" name="company">
-                                                    <% companies.forEach(company => { %>
-                                                        <option value="<%= company._id %>" <%= (company._id.toString() === employee.company.toString()) ? 'selected' : '' %>><%= company.name %></option>
-                                                    <% }); %>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Contact:</label>
-                                                <input class="form-control" type="tel" placeholder="Enter Contact" id="contact" name="contact" value="<%= employee.contact %>" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Email:</label>
-                                                <input class="form-control" type="email" placeholder="Enter Email" id="email" name="email" value="<%= employee.email %>" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Address:</label>
-                                                <input class="form-control" type="text" placeholder="Enter Address" id="email" name="address"  value="<%= employee.address %>"required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Rank:</label>
-                                                <input class="form-control" type="number" placeholder="Enter Rank" id="rank" name="rank" value="<%= employee.rank %>" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Designation:</label>
-                                                <input class="form-control" type="text"  step="0.01"  placeholder="Enter Designation" id="designation" name="designation" value="<%= employee.designation %>" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Employee ID:</label>
-                                                <input class="form-control" type="text" placeholder="Enter Employee ID" id="empid" name="empid" value="<%= employee.empid %>" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Branch ID:</label>
-                                                <input class="form-control" type="text" placeholder="Enter Branch ID" id="bid" name="bid" value="<%= employee.bid %>" required>
-                                            </div>
-                                        </div>
-                                        <p class="note-msg">NOTE : If the employee is an agent, please enter the agent's area; otherwise, mention NA.</p>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Area:</label>
-                                                <input class="form-control" type="text" placeholder="Enter Agent Area" id="area" name="area" value="<%= employee.area %>" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Team Size:</label>
-                                                <input class="form-control" type="number" placeholder="Enter Team Size" id="teamSize" name="teamSize" value="<%= employee.teamSize %>">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Experience (years):</label>
-                                                <input class="form-control" type="number" placeholder="Enter Experience" id="experience" name="experience" value="<%= employee.experience %>">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-4">
-                                            <div class="form-group local-forms">
-                                                <label>Achievements:</label>
-                                                <textarea class="form-control" id="achievements" name="achievements" rows="2" placeholder="Enter Achievements" value="<%= employee.achievements %>"></textarea>
-                                            </div>
-                                        </div>
+                                        <% }); %>
                                         <div class="col-12">
                                             <div class="student-submit">
                                                 <button type="submit" class="btn btn-primary">Update Employee</button>

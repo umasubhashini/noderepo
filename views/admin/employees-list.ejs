@@ -106,8 +106,7 @@
 												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
 												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
 												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
-												<a href="/add-employee" id="addCardBtn" class="btn btn-primary"><i
-														class="fas fa-plus"></i> Add Employee</a>
+												<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal"><i class="fas fa-plus"></i> Add Employee</a>
 											</div>
 										</div>
 									</div>
@@ -132,23 +131,27 @@
 														<td>
 															<%= index + 1 %>
 														</td>
-														<td><img src="<%= employee.photo %>" alt="Employee Photo"
-																width="50"></td>
+														<td><img src="<%= employee.photo %>" alt="Employee Photo" width="50"></td>
 														<td>
-															<%= employee.employeeData.name %>
+															<% let employeeName = ''; %>
+															<% employee.employeeData.forEach(data => { %>
+																<% if(data.name === 'name') { %>
+																	<% employeeName = data.value; %>
+																<% } %>
+															<% }) %>
+															<%= employeeName %>
 														</td>
 														<td>
 															<%= employee.companyName %>
-														</td>
-														<td>
+														</td>														<td>
 															<div class="actions">
-															  <a href="/edit-company/<%= companies._id %>" class="btn btn-sm btn-warning">
+															  <a href="/edit-employee/<%= employee._id %>" class="btn btn-sm btn-warning">
 																<i class="feather-edit"></i>
 															  </a>
 															</td>
 														<td>
 															<div class="actions">
-															  <a href="/delete-company/<%= companies._id %>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this company?')">
+															  <a href="/delete-employee/<%= employee._id %>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this employee?')">
 																<i class="feather-trash-2"></i>
 															  </a>
 															</div>
@@ -168,6 +171,32 @@
 				
 				
 			</div>
+			<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title">Add Employee</h5>
+					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+					  <form id="selectCompanyForm" action="/add-employee">
+						<div class="mb-3">
+						  <label for="companySelect" class="form-label">Select Company</label>
+						  <select class="form-select" id="companySelect" name="companyId" required>
+							<% companies.forEach(company => { %>
+							  <option value="<%= company._id %>"><%= company.name %></option>
+							<% }); %>
+						  </select>
+						</div>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					  </form>
+					  <div id="dynamicFormContainer">
+						<!-- Dynamic form will be loaded here based on the selected company -->
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
 			<!-- /Page Wrapper -->
 
 	</div>

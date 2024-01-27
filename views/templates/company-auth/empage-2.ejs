@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color:  #fff; /* Black background */
+      color:#000; /* White text color */
+    }
+
+    .container {
+      text-align: center;
+      background-color: #f7eaea; /* Black background for the container */
+      padding: 20px; /* Add some padding for better visibility */
+      border: 2px solid #fff; /* White border */
+      border-radius: 10px; /* Border radius for the container */
+      max-width: 400px; /* Limit container width */
+      width: 90%; /* Set a percentage width for responsiveness */
+    }
+    header {
+  text-align: center;
+  background-color: #e7dde3; /* Dark background for the header */
+  padding: 10px;
+}
+
+.logo-container {
+  width: 50px; /* Set the width of the circular container */
+  height: 30px; /* Set the height of the circular container */
+  border-radius: 40%; /* Make the container circular */
+  overflow: hidden; /* Clip the rectangular logo */
+  display: inline-block; /* Ensure inline block for centering */
+  margin-right: 10px;
+}
+
+.logo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+    .profile-image {
+      
+      width: 156px;
+      height: 156px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto; /* Center the image horizontally */
+      border: 2px solid #fe26d3; 
+      margin-top: 40px;/* White border */
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .name-container {
+      display: flex;
+      align-items: center;
+
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10px;
+      
+    }
+   
+    .personal-info-heading {
+      font-size: 14px;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+    .personal-info-heading {
+      font-size: 20px;
+      text-align: center; /* Align the text to the left */
+      font-weight: bold;
+      margin-top: 30px; /* Adjust margin for spacing */
+    }
+    .info-box {
+      border: 1px solid #fff; /* White border for the box */
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 25%; /* Circular shape */
+      background-color: #e7dde3; /* Change the background color */
+      overflow: hidden; /* Ensure content stays within the rounded shape */
+    }
+
+    .info-box div {
+      margin-bottom: 5px; /* Add margin between each field */
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-box span:last-child {
+      font-weight: bold; /* Display the actual values in bold */
+    }
+    .name {
+        font-size: 20px;
+      }
+      .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    
+     
+    @media screen and (max-width: 600px) {
+      /* Adjustments for screens with a width of 600 pixels or less */
+      
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <img src="<%= company.logo%>" alt="Logo">
+        <!-- Replace 'path/to/logo.png' with the actual path to your logo image -->
+      </div>
+     
+    </header>
+    <div class="profile-image">
+      <img src="<%= employee.photo%>" alt="Profile Image">
+    </div>
+    <div class="personal-info-heading">Personal Information</div>
+    <% employee.employeeData.forEach(data => { %>
+      <div class="info-box">
+          <div>
+              <span><%= data.name.toUpperCase() %>:</span>
+              <span><%= data.value %></span>
+          </div>
+      </div>
+  <% }); %> 
+    <div class="footer">
+    Powered by @eCardify
+  </div>
+  </div>
+   
+</body>
+</body>
+</html>
