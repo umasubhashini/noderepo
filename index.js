@@ -1191,21 +1191,25 @@ app.post("/company-details", upload.single("logo"), async (req, res) => {
 
 
 app.get('/add-employee', async (req, res) => {
-
-  const company = await mcompany.find();
-  res.render('admin/add-employee', { company });
-}
-);
-
-app.post('/add-employee', upload.single('photo'), async (req, res) => {
   try {
-    const { name, company, contact, email, address, rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
-    console.log(req.body);
+    const companyId = req.query.companyId;
+    const dynamicForm = await dfields.findOne({ company_id: companyId });
+    if (!dynamicForm) {
+      return res.status(404).send('Form not found for the selected company.');
+    }
 
+    res.render('admin/add-employee', { fields: dynamicForm.fields , companyId});
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+});
 
+app.post('/add-employee/:companyId', upload.single('photo'), async (req, res) => {
+  try {
+    const companyId = req.params.companyId;
     const file = req.file;
     const employeeId = new ObjectId();
-    const key = `${company}_${employeeId}`;
+    const key = `${companyId}_${employeeId}_profileimg`;
     const s3Params = {
       Bucket: process.env.S3_BUCKET_NAME,
       Key: `employee_img/${key}`,
@@ -1214,76 +1218,28 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
 
     };
     const s3UploadResponse = await s3.upload(s3Params).promise();
-    console.log(s3UploadResponse);
     const photoUrl = s3UploadResponse.Location;
-    const newEmployee = new emp({
-      _id: employeeId,
+
+    const employeeData = Object.keys(req.body).map(key => {
+      return { name: key, value: req.body[key] };
+    });
+
+    const newEmployee = new empInfo({
+      _id : employeeId,
+      company_id: companyId,
       photo: photoUrl,
-      name,
-      contact,
-      email,
-      address,
-      rank,
-      designation,
-      employeeid: empid,
-      branchid: bid,
-      area,
-      teamSize: teamSize || 0, // Set default value to 0 if not provided
-      experience: experience || 0, // Set default value to 0 if not provided
-      achievements: achievements || '', // Set default value to empty string if not provided
-      company,
-      name: name,
-      company: company,
-      contact: contact,
-      email: email,
-      address: address,
-      rank: rank,
-      designation: designation,
-      employeeid: empid,
-      branchid: bid,
-      area: area,
-      teamSize: teamSize,
-      experience: experience,
-      achievements: achievements,
-
+      employeeData: employeeData
     });
 
-    // Save the document to the database
     await newEmployee.save();
-    const employees = await emp.find();
-    const companies = await mcompany.find();
-    res.render('admin/employees-list', { employees, companies });
-    res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
+    res.redirect('/employee-list');
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error('Error adding new employee:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
-app.get('/:companyName/:id', async (req, res) => {
-  try {
-    const companyName = req.params.companyName;
-    const employeeid = req.params.id;
-    const company = await mcompany.findOne({
-      name: companyName, status: 1
-    });
-    console.log(company)
-    if (!company) {
-      return res.status(404).json({ message: 'Company not found' });
-    }
-
-    const employee = await emp.findOne({ _id: employeeid, company: company._id });
-    console.log(employee);
-    if (!employee) {
-      return res.status(404).json({ message: 'Employee not found' });
-    }
-
-    res.render('templates/company-auth/index', { employee, company });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
 
 app.get('/global/:name', async function (req, res) {
   try {
@@ -1360,45 +1316,26 @@ app.get("/employee-list", async (req, res) => {
       }
     }
   ]);
-  console.log(employees)
   const companies = await mcompany.find();
   res.render("admin/employees-list", { employees, companies });
 });
 
 // Post request to update employee details
-app.post(
-  "/edit-employee/:employeeId",
-  upload.single("photo"),
-  async (req, res) => {
-    const employeeId = req.params.employeeId;
-
+app.post("/edit-employee/:employeeId",upload.single("photo"),async (req, res) => {
   try {
-    // Retrieve the employee by ID
-    const employee = await emp.findById(employeeId);
-    const companies = await mcompany.find();
-
-    if (!employee) {
-      return res.status(404).json({ error: 'Employee not found' });
-    }
-
-    // Update employee fields
-    employee.name = req.body.name;
-    employee.company = req.body.company;
-    employee.contact = req.body.contact;
-    employee.email = req.body.email;
-    employee.address = req.body.address;
-    employee.rank = req.body.rank;
-    employee.designation = req.body.designation;
-    employee.employeeid = req.body.empid;
-    employee.branchid = req.body.bid;
-    employee.area = req.body.area;
-    employee.teamSize = req.body.teamSize || 0;
-    employee.experience = req.body.experience || 0;
-    employee.achievements = req.body.achievements || '';
-
-    // Update employee photo if a new one is provided
+    const employeeId = req.params.employeeId;
+    console.log(employeeId)
+    const company = await empInfo.findById(employeeId);
+    const formData = req.body.employeeData;
+    console.log(formData)
+    const employeeData = Object.entries(formData).map(([name, value]) => ({
+      name: name,
+      value: value,
+    }));
+    const update = { employeeData };
+    console.log(employeeData)
     if (req.file) {
-      const key = `${employee.company}_${employeeId}`;
+      const key = `${company.company_id}_${employeeId}_profileimg`;
       const s3Params = {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: `employee_img/${key}`,
@@ -1406,34 +1343,29 @@ app.post(
         ContentType: req.file.mimetype
       };
       const s3UploadResponse = await s3.upload(s3Params).promise();
-      employee.photo = s3UploadResponse.Location;
     }
 
-    // Save the updated employee to the database
-    const updatedEmployee = await employee.save();
-
-    // Redirect to the employee listing page or any other page after successful update
-    const employees = await emp.find();
-    res.render('admin/employees-list', { employees, companies });
+    await empInfo.findByIdAndUpdate(employeeId, update);
+    res.redirect('/employee-list');
   } catch (error) {
     console.error('Error updating employee:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+   
 
-app.get("/edit-employee/:employeeId", async (req, res) => {
+app.get('/edit-employee/:employeeId', async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
-    const employee = await emp.findById(employeeId);
-    const companies = await mcompany.find();
+    const employee = await empInfo.findById(employeeId);
 
     if (!employee) {
-      return res.status(404).json({ error: 'Employee not found' });
+      return res.status(404).send('Employee not found');
     }
 
-    res.render('admin/edit-employee', { employee, companies }); // Include 'companies' here
+    res.render('admin/edit-employee', { employee });
   } catch (error) {
-    console.error('Error fetching employee for editing:', error);
+    console.error('Error fetching employee:', error);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -1441,26 +1373,21 @@ app.get("/edit-employee/:employeeId", async (req, res) => {
 app.get("/delete-employee/:employeeId", async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
-    const employee = await emp.findByIdAndDelete(employeeId);
-
-    if (!employee) {
-      return res.status(404).json({ error: "Employee not found" });
-    }
-
-    // Delete the image from S3
-    const key = `employee_img/${employee.company}_${employee._id}`;
+    const result = await empInfo.findById(employeeId)
+    const url = new URL(result.photo);
+    const key = url.pathname.substring(1);
     const s3DeleteParams = {
       Bucket: process.env.S3_BUCKET_NAME,
       Key: key,
     };
 
     await s3.deleteObject(s3DeleteParams).promise();
-
-    // Fetch companies data
-    const companies = await mcompany.find(); // Assuming you have a model named Company
-
-    const employees = await emp.find();
-    res.render("admin/employees-list", { employees, companies });
+    const employee = await empInfo.findByIdAndDelete(employeeId);
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    
+   res.redirect('/employee-list');
   } catch (error) {
     console.error("Error deleting employee:", error);
     res.status(500).send("Internal Server Error");
@@ -1825,7 +1752,31 @@ app.post("/bulk-upload", upload.single('zipFiles'), async (req, res) => {
   }
 });
 
-
 app.get("/shops",async(req,res)=>{
   res.render('admin/shops-form');
 })
+
+
+app.get('/:companyName/:id', async (req, res) => {
+  try {
+    const companyName = req.params.companyName;
+    const employeeid = req.params.id;
+    console.log(companyName)
+    const company = await mcompany.findOne({name: companyName, status: 1});
+    console.log(company)
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+
+    const employee = await empInfo.findOne({ _id: employeeid, company_id: company._id });
+    console.log(employee);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    res.render('templates/company-auth/empage-2', { employee, company });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
