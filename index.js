@@ -27,6 +27,7 @@ const invitations = require("./models/invitations");
 const exceljs = require("exceljs");
 const AdmZip = require('adm-zip');
 const empInfo = require("./models/employeeinfo");
+const Shop = require("./models/shops");
 const csv = require('csvtojson');
 
 dotenv.config();
@@ -1753,8 +1754,62 @@ app.post("/bulk-upload", upload.single('zipFiles'), async (req, res) => {
 });
 
 app.get("/shops",async(req,res)=>{
-  res.render('admin/shops-form');
+  res.render('admin/add-shops');
 })
+
+app.post("/shops-form",upload.array('sliderimages[]'),async(req,res)=>{
+  try {
+    console.log(req.files);
+    shopsid = new ObjectId();
+    const sliderImageUrls = [];
+    const files = req.files;
+        for (let index = 0; index < files.length; index++) {
+            const file = files[index];
+            const filename = `${shopsid}_sliderimg_${index}`;
+            const s3Params = {
+                Bucket: process.env.S3_BUCKET_NAME,
+                Key: `shops/${filename}`,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+            };
+            const uploadResult = await s3.upload(s3Params).promise();
+            sliderImageUrls.push(uploadResult.Location);
+        }
+    const {shopName,owner,contactNo,email,address,link,about,timings,quickInfo,} = req.body;
+    const newShop = new Shop({ _id:shopsid,shopName,owner,contactNo,email,address,link,about,timings,quickInfo,sliderImages: sliderImageUrls});
+    const savedShop = await newShop.save();
+    res.redirect('/shops-list')
+  } catch (error) {
+    console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get("/shops-list",async(req,res)=>{
+  try {
+    const shops = await Shop.find(); 
+    res.render('admin/shops-list', {shops}); 
+} catch (error) {
+    console.error('Error fetching shops:', error);
+    res.status(500).send('Internal Server Error');
+}
+});
+
+app.get("/shop/:shopname",async(req,res)=>{
+  try {
+    const shopName = req.params.shopname;
+    const shop = await Shop.findOne({ shopName: shopName });
+    console.log(shop)
+    if (!shop) {
+        return res.status(404).send('Shop not found');
+    }
+
+    res.render("admin/shops-page", { shop });
+} catch (error) {
+    console.error('Error fetching shop:', error);
+    res.status(500).send('Internal Server Error');
+}
+});
 
 
 app.get('/:companyName/:id', async (req, res) => {
