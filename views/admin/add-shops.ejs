@@ -29,189 +29,13 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="/public/assets/admin/css/style.css">
-    <style>
-        /* Define @font-face for each font family and style */
-        @font-face {
-            font-family: 'Arial';
-            src: local('Arial');
-        }
-
-        @font-face {
-            font-family: 'Verdana';
-            src: local('Verdana');
-        }
-
-        @font-face {
-            font-family: 'Courier New';
-            src: local('Courier New');
-        }
-
-        @font-face {
-            font-family: 'Roboto';
-            src: local('Roboto');
-            font-weight: bold;
-            /* Example: bold */
-        }
-
-        @font-face {
-            font-family: 'Montserrat';
-            src: local('Montserrat');
-            font-weight: bold;
-            /* Example: bold */
-        }
-
-        @font-face {
-            font-family: 'Algerian';
-            src: local('Algerian');
-        }
-
-        @font-face {
-            font-family: 'Britannic Bold';
-            src: local('Britannic Bold');
-        }
-
-        @font-face {
-            font-family: 'Broadway';
-            src: local('Broadway');
-        }
-
-        @font-face {
-            font-family: 'Cooper Black';
-            src: local('Cooper Black');
-        }
-
-        @font-face {
-            font-family: 'Wide Latin';
-            src: local('Wide Latin');
-        }
-
-        /* Apply font families and styles to dropdown options */
-        .font-style-selectors option[value="Arial"] {
-            font-family: 'Arial';
-        }
-
-        .font-style-selectors option[value="Verdana"] {
-            font-family: 'Verdana';
-        }
-
-        .font-style-selectors option[value="Courier New"] {
-            font-family: 'Courier New';
-        }
-
-        .font-style-selectors option[value="Roboto"] {
-            font-family: 'Roboto';
-            font-weight: bold;
-            /* Example: bold */
-        }
-
-        .font-style-selectors option[value="Montserrat"] {
-            font-family: 'Montserrat';
-            font-weight: bold;
-            /* Example: bold */
-        }
-
-        .font-style-selectors option[value="Algerian"] {
-            font-family: 'Algerian';
-        }
-
-        .font-style-selectors option[value="Britannic Bold"] {
-            font-family: 'Britannic Bold';
-        }
-
-        .font-style-selectors option[value="Broadway"] {
-            font-family: 'Broadway';
-        }
-
-        .font-style-selectors option[value="Cooper Black"] {
-            font-family: 'Cooper Black';
-        }
-
-        .font-style-selectors option[value="Wide Latin"] {
-            font-family: 'Wide Latin';
-        }
-    </style>
 
 </head>
 
 <body>
-
-    <!-- Main Wrapper -->
     <div class="main-wrapper">
 
-        <!-- Header -->
-        <div class="header">
-
-            <!-- Logo -->
-            <div class="header-left">
-                <a href="index.ejs" class="logo">
-                    <img src="/public/assets/admin/img/logo.png" alt="Logo">
-                </a>
-                <a href="index.ejs" class="logo logo-small">
-                    <img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
-                </a>
-            </div>
-            <!-- /Logo -->
-
-            <div class="menu-toggle">
-                <a href="javascript:void(0);" id="toggle_btn">
-                    <i class="fas fa-bars"></i>
-                </a>
-            </div>
-
-           
-
-            <!-- Mobile Menu Toggle -->
-            <a class="mobile_btn" id="mobile_btn">
-                <i class="fas fa-bars"></i>
-            </a>
-            <!-- /Mobile Menu Toggle -->
-
-            <!-- Header Right Menu -->
-            <ul class="nav user-menu">
-                
-                <!-- Notifications -->
-
-                <!-- /Notifications -->
-                <li class="nav-item zoom-screen me-2">
-                    <a href="#" class="nav-link header-nav-list">
-                        <img src="/public/assets/admin/img/icons/header-icon-04.svg" alt="">
-                    </a>
-                </li>
-
-                <!-- User Menu -->
-                <li class="nav-item dropdown has-arrow new-user-menus">
-                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span class="user-img">
-                            <img class="rounded-circle" src="/public/assets/admin/img/profiles/avatar-01.jpg" width="31"
-                                alt="Ryan Taylor">
-                            <div class="user-text">
-                                <h6>Ryan Taylor</h6>
-                                <p class="text-muted mb-0">Administrator</p>
-                            </div>
-                        </span>
-                    </a>
-                    <div class="dropdown-menu">
-                        <div class="user-header">
-                            <div class="avatar avatar-sm">
-                                <img src="/public/assets/admin/img/profiles/avatar-01.jpg" alt="User Image"
-                                    class="avatar-img rounded-circle">
-                            </div>
-                            <div class="user-text">
-                                <h6>Ryan Taylor</h6>
-                                <p class="text-muted mb-0">Administrator</p>
-                            </div>
-                        </div>
-                        <a class="dropdown-item" href="profile.ejs">My Profile</a>
-                        <a class="dropdown-item" href="inbox.ejs">Inbox</a>
-                        <a class="dropdown-item" href="login.ejs">Logout</a>
-                    </div>
-                </li>
-                <!-- /User Menu -->
-
-            </ul>
-            <!-- /Header Right Menu -->
-
-        </div>
+        <%- include('header.ejs') %>
         <!-- /Header -->
 
         <!-- Sidebar -->
@@ -248,8 +72,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Shop Name<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="shopName" class="form-control"
                                                         placeholder="Enter Shop Name" required>
                                                 </div>
                                             </div>
@@ -257,8 +80,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Proprietor Name<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="owner" class="form-control"
                                                         placeholder="Enter proprietor Name" required>
                                                 </div>
                                             </div>
@@ -266,8 +88,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Contact Number<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="contactNo" class="form-control"
                                                         placeholder="Enter Contact Number" required>
                                                 </div>
                                             </div>
@@ -275,8 +96,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Email<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="email" name="email" class="form-control"
                                                         placeholder="Enter your Email" required>
                                                 </div>
                                             </div>
@@ -284,8 +104,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Address<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="address" class="form-control"
                                                         placeholder="Enter Shop Address" required>
                                                 </div>
                                             </div>
@@ -293,8 +112,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Your Website Link<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="link" class="form-control"
                                                         placeholder="Enter Your Link" required>
                                                 </div>
                                             </div>
@@ -302,8 +120,7 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>About<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="about" class="form-control"
                                                         placeholder="About Your Shop" required>
                                                 </div>
                                             </div>
@@ -311,42 +128,37 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Timings<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="timings" class="form-control"
                                                         placeholder="Enter Shop Timings" required>
                                                 </div>
-                                            </div>  
+                                            </div>
 
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Quick Info<span class="login-danger">*</span></label>
-                                                    <input name="invitationType" class="form-control"
-                                                        id='invitationType' type="text"
+                                                    <input type="text" name="quickInfo" class="form-control"
                                                         placeholder="Quick Info" required>
                                                 </div>
                                             </div>
-
-                                           
-   
                                         </div>
                                         <div class="col-12">
-                                            <h5 class="form-title"><span>Add Your Shop Images</span></h5>
-                                        </div>                                        <div class="form-group">
+                                        <h5 class="form-title"><span>Add Your Shop Images</span></h5>
+                                        </div><div class="form-group">
                                             <label>Slider One:</label>
-                                            <div class="slider-container" id="slider-one-container"></div>
+                                            <div class="slider-container" id="slider"></div>
                                             <button type="button" class="btn btn-primary add-slider"
-                                                data-container="slider-one-container">Add Slider</button>
+                                                data-container="slider">Add Slider</button>
                                         </div>
                                         <div class="col-12 button-container">
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
-                                    
+
                                     </div>
-                                    
-                                        
+
+
                                 </div>
 
-                                
+
                             </form>
                         </div>
                     </div>
@@ -364,11 +176,8 @@
                                     sliderContainer.innerHTML = `
                                     <div class="col-md-3">
                                         <label>Image:</label>
-                                        <input type="file" class="form-control" name="${containerId}-images[]" required>
+                                        <input type="file" class="form-control" name="sliderimages[]" accept="image/*" required>
                                     </div>
-                                    
-                                    
-                                    
                                     <div class="col-md-1">
                                         <label>&nbsp;</label>
                                         <button type="button" class="btn btn-danger delete-slider">Delete</button>
@@ -389,16 +198,6 @@
                 </div>
             </div>
     </div>
-
-
-    </div>
-
-    </div>
-    </div>
-    </div>
-
-
-
 
     <!-- jQuery -->
     <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
