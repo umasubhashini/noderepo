@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Preskool - Students</title>
+
+    <!-- Favicon -->
+
+	
+    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+
+    <!-- Fontfamily -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+
+    <!-- Pe7 CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+
+    <!-- Select CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+</head>
+<body>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+
+    <!-- Header -->
+    <%- include('../admin/header.ejs') %>
+    <!-- /Header -->
+
+    <!-- Sidebar -->
+    <%- include('../admin/sidebar.ejs') %>
+    <!-- /Sidebar -->
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col-sm-12">
+                        <div class="page-sub-header">
+                            <h3 class="page-title">View Card</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">User</li>
+                                <li class="breadcrumb-item active">ProfessionalCard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+          
+            <!-- Horizontal Card -->
+            <div class="card" id="previewCard">
+				<div class="card-body" >
+<div class="v71_14" id="frontview" style="background-image: url('<%= backgroundImage %>');">
+						<span class="v75_71"><%= templateFields[0].fieldValue %></span>
+						<div class="v71_22" id="image"><img src="<%= businessCard.Image %>" alt="User Image" style="max-width: 100%; height: auto;"></div>
+					</div>
+				</div>
+				<div class="card-body" >
+					<div class="v71_8" id="backview" style="background-image: url('<%= backgroundImage %>');">
+						<span class="v71_13"><%= templateFields[1].fieldValue %></span>
+						<div class="v71_25" id="qrcodeContainerPreview">
+							<div class="col-12 col-sm-4">
+								<div class="form-group local-forms">
+									<div id="qrcodeContainer"></div>
+									<label><span class="login-danger"></span></label>
+									<a id='downloadLink' class='download' download="qrcode.png" style='display: none;'></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <button id="downloadButton" class="btn btn-primary">Download Card</button>
+            <!-- /Horizontal Card -->
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+    <!-- /Page Wrapper -->
+
+</div>
+<!-- /Main Wrapper -->
+
+<!-- jQuery -->
+<script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Feather Icon JS -->
+<script src="/public/assets/admin/js/feather.min.js"></script>
+
+<!-- Slimscroll JS -->
+<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+
+<!-- Datepicker Core JS -->
+<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/public/assets/admin/js/script.js"></script>
+
+
+<script>
+    const bgColor = "<%= backgroundColor %>";
+ function updateElements() {
+    // Front View
+    const frontViewElement = document.getElementById("frontview");
+
+    // Back View
+    const backViewElement = document.getElementById("backview");
+
+
+    // Set background color dynamically
+    
+    frontViewElement.style.backgroundSize = "cover";
+    frontViewElement.style.backgroundColor = bgColor;
+    backViewElement.style.backgroundSize = "cover";
+    backViewElement.style.backgroundColor = bgColor;
+  }
+
+  // Call the function to update elements when the page loads
+  window.onload = function () {
+    updateElements();
+    generateQRCode();
+  };
+
+  
+  function downloadCard() {
+        const cardElement = document.getElementById("previewCard");
+
+        // Use html2pdf to convert the card HTML to PDF
+        html2pdf(cardElement, {
+            margin: 10,
+            filename: 'professional_card.pdf',
+            image: { type: 'jpg', quality: 1.00 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }).then((pdf) => {
+            // Save the PDF using FileSaver.js
+            pdf.save();
+        });
+    }
+
+    // Add click event listener to the download button
+    document.getElementById("downloadButton").addEventListener("click", downloadCard);
+
+    function generateQRCode() {
+    if("<%= templateFields[1].fieldValue %>"!==null){
+    var url = "<%= templateFields[1].fieldValue %>";
+    var qrcodeContainer = document.getElementById('qrcodeContainer');
+    var downloadLink = document.getElementById('downloadLink');
+    var qrcodeInput = document.getElementById('qrcodeInput');
+    var cardBackgroundColor = document.getElementById('frontview').style.backgroundColor;
+    var cardBackgroundImage = document.getElementById('frontview').style.backgroundImage;
+
+    if (url.trim() !== '') {
+        qrcodeContainer.innerHTML = '';
+
+        // Create a new QR code with reversed colors and a transparent background
+        var qrcode = new QRCode(qrcodeContainer, {
+            text: url,
+            width: 80,
+            height: 80,
+            colorDark: '#ffffff',          // Set QR code color to white
+            colorLight: 'rgba(255,255,255,0)',  // Set QR code background to transparent
+            correctLevel: QRCode.CorrectLevel.H,  // Set error correction level
+        });
+
+        // Apply fixed white border to the QR code
+        var canvas = qrcodeContainer.firstChild;
+        canvas.style.border = '5px solid white';
+
+        // Apply background image to the QR code
+        canvas.style.backgroundImage = cardBackgroundImage;
+        canvas.style.backgroundSize = 'cover'; // Adjust background size if needed
+
+        // Set the download link properties
+        downloadLink.href = canvas.toDataURL("image/png");
+        downloadLink.style.display = 'block';
+
+        // Display the URL in the QR code input field
+        qrcodeInput.value = url;
+    }
+}
+    else{
+        qrcodeInput.value = "";
+    }
+}
+</script>
+
+<!-- html2pdf library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/latest/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.0/html2pdf.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+</body>
+</html>

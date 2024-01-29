@@ -1425,28 +1425,57 @@ app.post('/user-manager/:userId', async (req, res) => {
 });
 
 
-
-
 app.get('/view-user/:userId', async (req, res) => {
+try{
+  const cardId = req.query.cardId;
   const userId = req.params.userId;
-
-  try {
-    const user = await User.findById(userId)
-      .populate('selectedItems.cardType')
-      .populate('selectedItems.template');
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Render the view with the user data and populated cardType and template
-    res.render('admin/view-user', { user });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
   }
-});
+  // Find the selected item with the given cardId
+  const selectedItem = user.selectedItems.find(item => item._id.toString() === cardId);
+  if (!selectedItem) {
+    return res.status(404).json({ error: 'Selected item not found' });
+  }
 
+  const template=selectedItem.template;
+  const businessCard = await BusinessCard.findOne({ user: userId,selectedTemplate:template })
+  .populate('selectedTemplate')
+  .populate('selectedCardType')
+  .populate('selectedSubscriptionPlan');
+
+  console.log(businessCard);
+
+  if (!businessCard) {
+    // Return a more specific error message when the card is not found
+    return res.status(404).json({ error: 'Business card not found for the given user and template' });
+  }
+
+  // Get template name, background color, and background image from the businessCard
+  const templateName = businessCard.selectedTemplate.name;
+  const backgroundColor = businessCard.bgColor;
+  const backgroundImage = businessCard.bgImg;
+  // Get card type, subscription plan, and template fields from the businessCard
+  const cardType = businessCard.selectedCardType;
+  const subscriptionPlan = businessCard.selectedSubscriptionPlan;
+  const templateFields = businessCard.templateFields;
+
+      // Render the template with the retrieved values
+      res.render(`cards/${templateName}`, {
+        businessCard,
+        templateFields,
+        backgroundColor,
+        backgroundImage,
+      });
+  
+      console.log(templateName);
+
+} catch (error) {
+  console.error('Error generating card:', error);
+  res.status(500).send('Internal Server Error');
+}
+});
 
 app.get("/custompages", async (req, res) => {
   const employees = await emp.find();
@@ -1835,3 +1864,9 @@ app.get('/:companyName/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+app.get("/sample",async(req,res)=>{
+  res.render('admin/shops-2')
+})
+
+
