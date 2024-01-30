@@ -68,9 +68,6 @@ const s3 = new AWS.S3();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-app.use((req, res, next) => {
-  res.status(404).render('404');
-});
 
 app.get('/', function (req, res) {
   res.render('landing/index');
@@ -1872,4 +1869,6 @@ app.get("/sample",async(req,res)=>{
   res.render('admin/shops-2')
 })
 
-
+app.get("/:unknown",async(req,res)=>{
+    res.render('404')
+})
