@@ -1869,4 +1869,6 @@ app.get("/sample",async(req,res)=>{
   res.render('admin/shops-2')
 })
 
-
+app.get("/:unknown",async(req,res)=>{
+    res.render('404')
+})
