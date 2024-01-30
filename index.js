@@ -68,6 +68,38 @@ const s3 = new AWS.S3();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+const checkMaintenance = async () => {
+  const apiEndpoint = 'https://takshalabs-next-app.vercel.app/projects/65b80fdab66646415b9ecf25';
+
+  try {
+      const response = await fetch(apiEndpoint);
+
+      if (!response.ok) {
+          throw new Error(`Failed to fetch maintenance status. Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.maintenanceStatus) {
+          console.log('The system is under maintenance.');
+          return true;
+      } else {
+          console.log('The system is not under maintenance.');
+          return false;
+      }
+  } catch (error) {
+      console.error('Error fetching maintenance status:', error.message);
+      return true;
+  }
+};
+
+app.use(async (req, res, next) => {
+  //maintenace check ...
+  const status = await checkMaintenance();  
+  status ? res.render('landing/maintenance') : next() ;
+});
+
+
 
 app.get('/', function (req, res) {
   res.render('landing/index');
@@ -82,8 +114,6 @@ app.get('/register', async (req, res) => {
   res.render('register/register');
 }
 );
-
-
 
 app.get('/about', function (req, res) {
   res.render('/views/about/about.ejs');
@@ -100,8 +130,6 @@ app.listen(8000, function () {
 })
 
 
-
-
 // Log Model
 // const logModel = new LogModel();
 
@@ -115,7 +143,9 @@ app.listen(8000, function () {
 //   };
 
 //   await LogModel.logEvent('route_access', routeAccessDetails);
-//   next();
+
+//   status ? res.render('/landing/maintenance') : next() ;
+//   // next();
 // });
 
 
@@ -1870,5 +1900,5 @@ app.get("/sample",async(req,res)=>{
 })
 
 app.get("/:unknown",async(req,res)=>{
-    res.render('404')
+    res.render('landing/404')
 })
