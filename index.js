@@ -29,6 +29,7 @@ const AdmZip = require('adm-zip');
 const empInfo = require("./models/employeeinfo");
 const Shop = require("./models/shops");
 const csv = require('csvtojson');
+const checkMaintenance = require('./provider')
 
 dotenv.config();
 
@@ -103,34 +104,36 @@ app.listen(8000, function () {
 
 
 // Log Model
-// const logModel = new LogModel();
+const logModel = new LogModel();
 
 // Middleware for logging route access
-// app.use(async (req, res, next) => {
-//   const routeAccessDetails = {
-//     method: req.method,
-//     path: req.path,
-//     query: req.query,
-//     params: req.params,
-//   };
+app.use(async (req, res, next) => {
+  const routeAccessDetails = {
+    method: req.method,
+    path: req.path,
+    query: req.query,
+    params: req.params,
+  };
 
-//   await LogModel.logEvent('route_access', routeAccessDetails);
-//   next();
-// });
+  await LogModel.logEvent('route_access', routeAccessDetails);
+  const status = await checkMaintenance();
+  status ? res.render('/landing/maintenance') : next() ;
+  // next();
+});
 
 
 
 // Displaying all the logs
-// app.get('/_logs', async (req, res) => {
-//   try {
-//     const logs = await logModel.getAllLogs();
-//     console.log(logs);
-//     res.json(logs);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
+app.get('/_logs', async (req, res) => {
+  try {
+    const logs = await logModel.getAllLogs();
+    console.log(logs);
+    res.json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 app.get("/download-schema-csv/:companyid", async (req, res) => {
   try {
@@ -1870,5 +1873,5 @@ app.get("/sample",async(req,res)=>{
 })
 
 app.get("/:unknown",async(req,res)=>{
-    res.render('404')
+    res.render('landing/404')
 })
