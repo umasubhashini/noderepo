@@ -1,8 +1,8 @@
- const checkMaintenance = () => {
+ const checkMaintenance = async () => {
 
     const apiEndpoint = 'https://takshalabs-next-app.vercel.app/projects/65b80fdab66646415b9ecf25';
 
-    return fetch(apiEndpoint)
+    return await fetch(apiEndpoint)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch maintenance status. Status: ${response.status}`);
@@ -28,3 +28,5 @@
             // Handle the error as needed (e.g., show an error message to the user)
         });
 };
+
+module.exports = checkMaintenance;

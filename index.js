@@ -29,7 +29,6 @@ const AdmZip = require('adm-zip');
 const empInfo = require("./models/employeeinfo");
 const Shop = require("./models/shops");
 const csv = require('csvtojson');
-const checkMaintenance = require('./provider')
 
 dotenv.config();
 
@@ -69,6 +68,38 @@ const s3 = new AWS.S3();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+const checkMaintenance = async () => {
+  const apiEndpoint = 'https://takshalabs-next-app.vercel.app/projects/65b80fdab66646415b9ecf25';
+
+  try {
+      const response = await fetch(apiEndpoint);
+
+      if (!response.ok) {
+          throw new Error(`Failed to fetch maintenance status. Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.maintenanceStatus) {
+          console.log('The system is under maintenance.');
+          return true;
+      } else {
+          console.log('The system is not under maintenance.');
+          return false;
+      }
+  } catch (error) {
+      console.error('Error fetching maintenance status:', error.message);
+      return true;
+  }
+};
+
+app.use(async (req, res, next) => {
+  //maintenace check ...
+  const status = await checkMaintenance();  
+  status ? res.render('landing/maintenance') : next() ;
+});
+
+
 
 app.get('/', function (req, res) {
   res.render('landing/index');
@@ -83,8 +114,6 @@ app.get('/register', async (req, res) => {
   res.render('register/register');
 }
 );
-
-
 
 app.get('/about', function (req, res) {
   res.render('/views/about/about.ejs');
@@ -101,39 +130,37 @@ app.listen(8000, function () {
 })
 
 
-
-
 // Log Model
-const logModel = new LogModel();
+// const logModel = new LogModel();
 
 // Middleware for logging route access
-app.use(async (req, res, next) => {
-  const routeAccessDetails = {
-    method: req.method,
-    path: req.path,
-    query: req.query,
-    params: req.params,
-  };
+// app.use(async (req, res, next) => {
+//   const routeAccessDetails = {
+//     method: req.method,
+//     path: req.path,
+//     query: req.query,
+//     params: req.params,
+//   };
 
-  await LogModel.logEvent('route_access', routeAccessDetails);
-  const status = await checkMaintenance();
-  status ? res.render('/landing/maintenance') : next() ;
-  // next();
-});
+//   await LogModel.logEvent('route_access', routeAccessDetails);
+
+//   status ? res.render('/landing/maintenance') : next() ;
+//   // next();
+// });
 
 
 
 // Displaying all the logs
-app.get('/_logs', async (req, res) => {
-  try {
-    const logs = await logModel.getAllLogs();
-    console.log(logs);
-    res.json(logs);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+// app.get('/_logs', async (req, res) => {
+//   try {
+//     const logs = await logModel.getAllLogs();
+//     console.log(logs);
+//     res.json(logs);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 app.get("/download-schema-csv/:companyid", async (req, res) => {
   try {
